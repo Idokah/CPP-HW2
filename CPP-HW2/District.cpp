@@ -25,13 +25,44 @@ int District::getID() { return this->id; }
 char* District::getName() { return this->name; }
 char* District::getName() const { return this->name; }
 
+int District::getElectionResultsSize() { return this->electionResultsSize; }
+
 int District::getRepresentativeNum(){return this->representativeNum; }
 int District::getRepresentativeNum() const { return this->representativeNum; }
 
 int* District::getElectionResults(){ return this->electionResults; }
 
-void District::printType(std::ostream& os) const
+void District::printType(std::ostream& os) const{}
+
+void District::printElectionResult(int partiesLogSize, Party** parties)
 {
+    Party* party, * winningParty;
+    char* headName;
+    int numOfExistsPartiesInDistrict, * numOfRepresantivesPerParty = nullptr, * electionResults;
+    float* percentagePerParty = nullptr;
+
+    electionResults = this->getElectionResults();
+    percentagePerParty = this->getPercentagePerParty();
+    numOfRepresantivesPerParty = this->getNumOfRepresantivesPerParty(numOfExistsPartiesInDistrict);
+
+    cout << "--- parties results --- " << endl;
+    for (int j = 0; j < partiesLogSize; ++j) {
+        cout << "    " << *(parties[j]) << endl;
+        if (j < numOfExistsPartiesInDistrict)
+        {
+            cout << "        number of voters- " << electionResults[j] << endl
+                << "        percentage of all votes - " << percentagePerParty[j] << "%" << endl;
+            if (numOfRepresantivesPerParty[j] > 0) {
+                cout << "        represantives - " << endl;
+                party = parties[j];
+                party->printNRepresantive(this->getID(), numOfRepresantivesPerParty[j]);
+            }
+        }
+        else {
+            cout << "        number of voters" << " - 0" << endl
+                << "        percentage of all votes - 0%" << endl;
+        }
+    }
 }
 
 District::District(const District& other)
@@ -147,7 +178,7 @@ float District::getVotePercentage()
 
 ostream& operator<<(ostream& os, const District& district)
 {
-    os << "District Name: " << district.getName() << ", num of representative: " << district.getRepresentativeNum();
+    os << "District Name: " << district.getName() << ", num of representative: " << district.getRepresentativeNum()<<" ";
     district.printType(os);
     return os;
 }

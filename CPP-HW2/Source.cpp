@@ -15,6 +15,11 @@ void printAllParties(ElectionRound& electionRound);
 void vote(ElectionRound& electionRound);
 void showElectionResults(ElectionRound& electionRound);
 
+void voteMOCK(ElectionRound& electionRound, char* citizenId, int partyId);
+void addDistrictMOCK(ElectionRound& electionRound, char* name, int representativeNum, int type);
+void addCitizenMOCK(ElectionRound& electionRound, char* name, char* id, int districtNum);
+void addPartyMOCK(ElectionRound& electionRound, char* name, char* id);
+void setCitizenAsPartyRepresentiveMOCK(ElectionRound& electionRound, char* representiveId, int partyId, int districtId);
 
 using namespace std;
 
@@ -23,10 +28,78 @@ const int MAX_STRING_LEN = 100;
 int main()
 {
     int option = 0;
-    int day, month, year;
-	cout << "enter elections date DD MM YYYY ";
-	cin >> day >> month >> year;
+    int day=1, month=1, year=1;
+	//cout << "enter elections date DD MM YYYY ";
+	//cin >> day >> month >> year;
     ElectionRound electionRound(day, month, year);
+    addDistrictMOCK(electionRound, const_cast<char*>("A"), 4,1);
+    addDistrictMOCK(electionRound, const_cast<char*>("B"), 10,1);
+    addDistrictMOCK(electionRound, const_cast<char*>("C"), 2,0);
+
+    addCitizenMOCK(electionRound, const_cast<char*>("A1"), const_cast<char*>("11"), 1);
+    addCitizenMOCK(electionRound, const_cast<char*>("A2"), const_cast<char*>("12"), 1);
+    addCitizenMOCK(electionRound, const_cast<char*>("A3"), const_cast<char*>("13"), 1);
+    addCitizenMOCK(electionRound, const_cast<char*>("A4"), const_cast<char*>("14"), 1);
+    addCitizenMOCK(electionRound, const_cast<char*>("A5"), const_cast<char*>("15"), 1);
+
+    addCitizenMOCK(electionRound, const_cast<char*>("B1"), const_cast<char*>("21"), 2);
+    addCitizenMOCK(electionRound, const_cast<char*>("B2"), const_cast<char*>("22"), 2);
+    addCitizenMOCK(electionRound, const_cast<char*>("B3"), const_cast<char*>("23"), 2);
+    addCitizenMOCK(electionRound, const_cast<char*>("B4"), const_cast<char*>("24"), 2);
+    addCitizenMOCK(electionRound, const_cast<char*>("B5"), const_cast<char*>("25"), 2);
+    addCitizenMOCK(electionRound, const_cast<char*>("B6"), const_cast<char*>("26"), 2);
+    addCitizenMOCK(electionRound, const_cast<char*>("B7"), const_cast<char*>("27"), 2);
+    addCitizenMOCK(electionRound, const_cast<char*>("B8"), const_cast<char*>("28"), 2);
+    addCitizenMOCK(electionRound, const_cast<char*>("B9"), const_cast<char*>("29"), 2);
+    addCitizenMOCK(electionRound, const_cast<char*>("B10"), const_cast<char*>("210"), 2);
+
+    addCitizenMOCK(electionRound, const_cast<char*>("C1"), const_cast<char*>("31"), 3);
+    addCitizenMOCK(electionRound, const_cast<char*>("C2"), const_cast<char*>("32"), 3);
+
+    addPartyMOCK(electionRound, const_cast<char*>("one"), const_cast<char*>("12"));
+    addPartyMOCK(electionRound, const_cast<char*>("two"), const_cast<char*>("21"));
+    addPartyMOCK(electionRound, const_cast<char*>("three"), const_cast<char*>("22"));
+
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("11"), 1, 1);
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("14"), 1, 1);
+
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("23"), 2, 2);
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("24"), 2, 2);
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("25"), 2, 2);
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("26"), 2, 2);
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("15"), 2, 1);
+
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("31"), 3, 3);
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("32"), 3, 3);
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("27"), 3, 2);
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("28"), 3, 2);
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("29"), 3, 2);
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("210"), 3, 2);
+    setCitizenAsPartyRepresentiveMOCK(electionRound, const_cast<char*>("13"), 3, 1);
+
+
+    printAllDistricts(electionRound);
+    printAllParties(electionRound);
+    printAllCitizens(electionRound);
+
+
+    voteMOCK(electionRound, const_cast<char*>("13"), 1);
+    voteMOCK(electionRound, const_cast<char*>("14"), 1);
+    voteMOCK(electionRound, const_cast<char*>("15"), 1);
+
+    voteMOCK(electionRound, const_cast<char*>("23"), 2);
+    voteMOCK(electionRound, const_cast<char*>("24"), 2);
+    voteMOCK(electionRound, const_cast<char*>("25"), 2);
+    voteMOCK(electionRound, const_cast<char*>("11"), 2);
+
+
+    voteMOCK(electionRound, const_cast<char*>("31"), 3);
+    voteMOCK(electionRound, const_cast<char*>("32"), 3);
+    voteMOCK(electionRound, const_cast<char*>("26"), 3);
+    voteMOCK(electionRound, const_cast<char*>("27"), 3);
+    voteMOCK(electionRound, const_cast<char*>("28"), 3);
+    voteMOCK(electionRound, const_cast<char*>("29"), 3);
+    voteMOCK(electionRound, const_cast<char*>("210"), 3);
 
 
     while (option != 10) {
@@ -81,12 +154,57 @@ int main()
 
 
 
+
+void voteMOCK(ElectionRound& electionRound, char* citizenId, int partyId) {
+    Citizen* voter = electionRound.getCitizenByID(citizenId);
+    District* district = voter->getDistrict();
+    district->addVote(voter, partyId);
+    Party* party = electionRound.getPartyByID(partyId);
+    if (!electionRound.isValidParty("vote", party)) return;
+    party->increaseNumberOfVotes();
+}
+
+
+void setCitizenAsPartyRepresentiveMOCK(ElectionRound& electionRound, char* representiveId, int partyId, int districtId) {
+    Citizen* citizen = electionRound.getCitizenByID(representiveId);
+    if (!electionRound.isValidCitizen("setCitizenAsPartyRepresentive", citizen)) return;
+    citizen->setIsPartyMember();
+    Party* party = electionRound.getPartyByID(partyId);
+    if (!electionRound.isValidParty("setCitizenAsPartyRepresentive", party)) return;
+    party->addRepresentive(districtId, citizen);
+}
+void addDistrictMOCK(ElectionRound& electionRound, char* name, int representativeNum, int districtType) {
+    District* district;
+    if (districtType == 0) district = new UnifiedDistrict(name, representativeNum);
+    else district = new DividedDistrict(name, representativeNum);
+    electionRound.addDistrict(district);
+}
+
+
+
+void addCitizenMOCK(ElectionRound& electionRound, char* name, char* id, int districtNum) {
+    int birthYear = 1992;
+    District* district = electionRound.getDistrictByID(districtNum);
+    Citizen* citizen = new Citizen(name, id, birthYear, district);
+    electionRound.addCitizen(citizen);
+}
+
+void addPartyMOCK(ElectionRound& electionRound, char* name, char* id) {
+
+    Citizen* head = electionRound.getCitizenByID(id);
+    if (!electionRound.isValidCitizen("addParty", head)) return;
+    Party* party = new Party(name, head);
+    electionRound.addParty(party);
+    head->setIsPartyMember();
+}
+
+
 void addDistrict(ElectionRound &electionRound) {
     char name[MAX_STRING_LEN];
     int representativeNum; 
     bool districtType;
     District* district;
-    cout << "enter name, number of representative and district type (0 for divided, 1 for unified)";
+    cout << "enter name, number of representative and district type (1 for divided, 0 for unified)";
     cin >> name >> representativeNum >> districtType;
     if (districtType == 0) district = new UnifiedDistrict(name, representativeNum);
     else district = new DividedDistrict(name, representativeNum);
@@ -176,34 +294,10 @@ void showElectionResults(ElectionRound& electionRound){
     for (int i = 0; i < electionRound.getDistrictLogSize(); ++i) {
 
         district = electionRound.getDistricts()[i];
-        winningParty = electionRound.getPartyByID(district->getWinningParty());
-        headName = winningParty->getPartyHead()->getName();
-        cout << *district << endl
-             << "    head of the winning party- " << headName << endl
-             << "    vote percentage- "  << district->getVotePercentage() <<"%"<< endl;
-        electionResults = district->getElectionResults();
-        percentagePerParty = district->getPercentagePerParty();
-        numOfRepresantivesPerParty = district->getNumOfRepresantivesPerParty(numOfExistsPartiesInDistrict);
-        winningParty->increaseNumberOfWinningRepresentives(district->getRepresentativeNum());
-        for (int j = 0; j < electionRound.getPartiesLogSize(); ++j) {
-            cout <<"    "<< *(electionRound.getPartyByID(j+1))<< endl;
-            if (j < numOfExistsPartiesInDistrict)
-            {
-                cout << "        number of voters -" << electionResults[j] << endl
-                     << "        percentage of all votes - " << percentagePerParty[j] << "%" << endl;
-                if (numOfRepresantivesPerParty[j] > 0) {
-                    cout << "        represantives - " << endl;
-                    party = electionRound.getPartyByID(j + 1);
-                    party->printNRepresantive(i, numOfRepresantivesPerParty[j]);
-                }
-            }
-            else {
-                cout << "        number of voters" << " - 0" << endl
-                     << "        percentage of all votes - 0%" << endl;
-            }
-        }
+        cout << "--------------" << *district << " -------------------" << endl;
+        district->printElectionResult(electionRound.getPartiesLogSize(),electionRound.getPartiesArr());
     }
-
+    cout << "-------------- Summary -------------------" << endl;
     Party** parties = electionRound.getSortedParties();
     for (int i = 0; i < electionRound.getPartiesLogSize(); i++) {
         cout <<*parties[i]<<endl

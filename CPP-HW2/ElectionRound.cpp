@@ -32,6 +32,11 @@ int ElectionRound::getDistrictLogSize(){ return this->districtsLogSize; }
 
 int ElectionRound::getPartiesLogSize(){ return this->partiesLogSize; }
 
+Party** ElectionRound::getPartiesArr()
+{
+    return parties;
+}
+
 void ElectionRound::addDistrict(District* district)
 {
 	if (this->districtsLogSize == this->districtsPhySize)

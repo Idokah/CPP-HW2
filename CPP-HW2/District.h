@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include "Party.h"
+
 using namespace std;
 class Citizen;
 
@@ -16,7 +18,7 @@ class District
         int getID();
         char* getName();
         char* getName() const;
-
+        int getElectionResultsSize();
         int getRepresentativeNum();
         int getRepresentativeNum() const;
         int getWinningParty();
@@ -27,7 +29,7 @@ class District
 
         friend ostream& operator<<(ostream&, const District&);
         virtual void printType(std::ostream& os) const;
-
+        virtual void printElectionResult(int partiesLogSize, Party** parties);
 private:
 		char *name;
 		int id;

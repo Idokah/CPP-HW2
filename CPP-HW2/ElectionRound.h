@@ -20,6 +20,7 @@ class ElectionRound
         int getDistrictLogSize();
         int getPartiesLogSize();
         District** getDistricts();
+		Party** getPartiesArr();
         void printAllDistricts();
         void printAllCitizens();
         void printAllParties();
