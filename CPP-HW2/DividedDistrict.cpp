@@ -24,6 +24,7 @@ void DividedDistrict::printElectionResult(int partiesLogSize, Party** parties)
             party->increaseNumberOfWinningRepresentives(numOfRepresantive);
         }
      }
+    delete[] votersPerParty;
     District::printElectionResult(partiesLogSize, parties);
 }
 
