@@ -26,6 +26,8 @@ ElectionRound::~ElectionRound()
     delete[] this->districts;
 }
 
+void ElectionRound::addDistrict(District* district){}
+
 District** ElectionRound::getDistricts(){ return this->districts; }
 
 int ElectionRound::getDistrictLogSize(){ return this->districtsLogSize; }
@@ -35,15 +37,6 @@ int ElectionRound::getPartiesLogSize(){ return this->partiesLogSize; }
 Party** ElectionRound::getPartiesArr()
 {
     return parties;
-}
-
-void ElectionRound::addDistrict(District* district)
-{
-	if (this->districtsLogSize == this->districtsPhySize)
-	{
-		this->increaseDistrictsArrSize();
-	}
-	this->districts[this->districtsLogSize++] = district;
 }
 
 void ElectionRound::increaseDistrictsArrSize() {
@@ -131,12 +124,7 @@ District* ElectionRound::getDistrictByID(const int districtID)
     return nullptr;
 }
 
-void ElectionRound::printAllDistricts()
-{
-    for (int i = 0; i < districtsLogSize; ++i) {
-        cout<<*(districts[i])<<endl;
-    }
-}
+void ElectionRound::printAllDistricts() {}
 
 void ElectionRound::printAllCitizens()
 {

@@ -6,9 +6,11 @@
 #include "District.h"
 #include "Party.h"
 
-// TODO protected?
-class SimpleElectionRound : protected ElectionRound {
+class SimpleElectionRound : public ElectionRound {
 	public:
+		SimpleElectionRound(int day, int month, int year);
+		virtual void addDistrict(District* district);
+		virtual void printAllDistricts();
 	private:
 };
 

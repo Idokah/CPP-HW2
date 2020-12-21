@@ -11,7 +11,7 @@ class ElectionRound
         ElectionRound(ElectionRound& electionRound) = delete;
         void operator=(const ElectionRound& other) = delete;
         ~ElectionRound();
-		void addDistrict(District* district);
+		virtual void addDistrict(District* district);
 		void addCitizen(Citizen* citizen);
 		void addParty(Party* party);
 		Citizen* getCitizenByID(const char* representiveID);
@@ -21,7 +21,7 @@ class ElectionRound
         int getPartiesLogSize();
         District** getDistricts();
 		Party** getPartiesArr();
-        void printAllDistricts();
+        virtual void printAllDistricts();
         void printAllCitizens();
         void printAllParties();
         Party** getSortedParties();
@@ -40,18 +40,23 @@ private:
 		Citizen** votersBook;
 		int votersLogSize;
 		int votersPhySize;
-		void increaseDistrictsArrSize();
+		void increaseVotersArrSize();
+
 		// parties
 		Party** parties;
 		int partiesLogSize;
 		int partiesPhySize;
 		void increasePartiesArrSize();
-		// districts
-		District** districts;
-		int districtsLogSize;
-		int districtsPhySize;
-		void increaseVotersArrSize();
+		
         void mergeSort(Party** pointersArr, int size);
 		void merge(Party** pointersArr1, Party** pointersArr2, int size1, int size2, Party** res);
+protected:
+	// districts
+	int districtsLogSize;
+	int districtsPhySize;
+	District** districts;
+	void increaseDistrictsArrSize();
+
+
 };
 

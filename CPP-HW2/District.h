@@ -5,6 +5,12 @@
 using namespace std;
 class Citizen;
 
+struct votesPerParty
+{
+    int partyIndex;
+    int numOfVotes;
+};
+
 class District
 {
 	public:
@@ -25,12 +31,14 @@ class District
         int* getNumOfRepresantivesPerParty(int& numOfExistsPartiesInDistrict);
         float* getPercentagePerParty();
         float getVotePercentage();
+        void mergeSort(votesPerParty* indexesArr, int size);
+        void merge(votesPerParty* indexesArr1, votesPerParty* indexesArr2, int size1, int size2, votesPerParty* res);
         int* getElectionResults();
-
         friend ostream& operator<<(ostream&, const District&);
         virtual void printType(std::ostream& os) const;
         virtual void printElectionResult(int partiesLogSize, Party** parties);
-private:
+        votesPerParty* getPartiesSortedByVotes(int* electionResult, int electionResultLogSize);
+    private:
 		char *name;
 		int id;
 		int citizenNum;
