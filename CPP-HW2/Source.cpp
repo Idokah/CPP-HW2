@@ -15,6 +15,9 @@ void printAllCitizens(ElectionRound& electionRound);
 void printAllParties(ElectionRound& electionRound);
 void vote(ElectionRound& electionRound);
 void showElectionResults(ElectionRound& electionRound);
+bool isValidCitizen(const char* action, Citizen* citizen);
+bool isValidParty(const char* action, Party* party);
+bool isValidDistrictId(const int districtsLogSize, const int districtId);
 
 void voteMOCK(ElectionRound& electionRound, char* citizenId, int partyId);
 void addDistrictMOCK(ElectionRound& electionRound, char* name, int representativeNum, int type);
@@ -24,12 +27,27 @@ void setCitizenAsPartyRepresentiveMOCK(ElectionRound& electionRound, char* repre
 
 using namespace std;
 
+enum class OPTIONS {
+     addDistrict=1,
+     addCitizen=2,
+     addParty=3,
+     addCitizenAsPartyRepresentive=4,
+     showAllDistricts=5,
+     showAllCitizens=6,
+     showAllParties=7,
+     vote=8,
+     showElectionResults=9,
+     exit=10
+};
+
+
 const int MAX_STRING_LEN = 100;
 
 int main()
 {
-    int option = 0;
-    int day = 1, month = 1, year = 1, electionRoundType =1;
+    OPTIONS option=OPTIONS::showElectionResults;
+    int day = 1, month = 1, year = 1, electionRoundType = 0;
+    int optionNum;
 	//cout << "enter elections date DD MM YYYY ";
 	//cin >> day >> month >> year;
 
@@ -69,7 +87,7 @@ int main()
     addPartyMOCK(*electionRound, const_cast<char*>("two"), const_cast<char*>("21"));
     addPartyMOCK(*electionRound, const_cast<char*>("three"), const_cast<char*>("22"));
 
-    setCitizenAsPartyRepresentiveMOCK(*electionRound, const_cast<char*>("11"), 1, 1, electionRoundType);
+    setCitizenAsPartyRepresentiveMOCK(*electionRound, const_cast<char*>("11"), 2, 2, electionRoundType);
     setCitizenAsPartyRepresentiveMOCK(*electionRound, const_cast<char*>("14"), 1, 1, electionRoundType);
 
     setCitizenAsPartyRepresentiveMOCK(*electionRound, const_cast<char*>("23"), 2, 2, electionRoundType);
@@ -92,7 +110,7 @@ int main()
     printAllCitizens(*electionRound);
 
 
-    voteMOCK(*electionRound, const_cast<char*>("13"), 1);
+    voteMOCK(*electionRound, const_cast<char*>("13"), 2);
     voteMOCK(*electionRound, const_cast<char*>("14"), 1);
     voteMOCK(*electionRound, const_cast<char*>("15"), 1);
 
@@ -111,7 +129,7 @@ int main()
     voteMOCK(*electionRound, const_cast<char*>("210"), 3);
 
 
-    while (option != 10) {
+    while (option != OPTIONS::exit) {
         cout << "enter one of the options-" << endl
              << "1 - add district" << endl
              << "2- add citizen" << endl
@@ -123,41 +141,43 @@ int main()
              << "8- vote" << endl
              << "9- show election results" << endl
              << "10- exit the program" << endl;
-        cin >> option;
+
+        cin >> optionNum;
+        option = (OPTIONS)optionNum;
+
         switch (option)
         {
-            case 1:
+            case OPTIONS::addDistrict :
                 addDistrict(*electionRound);
                 break;
-            case 2:
+            case OPTIONS::addCitizen:
                 addCitizen(*electionRound, electionRoundType);
                 break;
-            case 3:
+            case OPTIONS::addParty:
                 addParty(*electionRound);
                 break;
-            case 4:
+            case OPTIONS::addCitizenAsPartyRepresentive:
                 setCitizenAsPartyRepresentive(*electionRound, electionRoundType);
                 break;
-            case 5:
+            case OPTIONS::showAllDistricts:
                 printAllDistricts(*electionRound);
                 break;
-            case 6:
+            case OPTIONS::showAllCitizens:
                 printAllCitizens(*electionRound);
                 break;
-            case 7:
+            case OPTIONS::showAllParties:
                 printAllParties(*electionRound);
                 break;
-            case 8:
+            case OPTIONS::vote:
                 vote(*electionRound);
                 break;
-            case 9:
+            case OPTIONS::showElectionResults:
                 showElectionResults(*electionRound);
                 break;
-            case 10:
+            case OPTIONS::exit:
                 cout << "see you soon" << endl;
                 break;
         }
-
     }
 }
 
@@ -169,17 +189,17 @@ void voteMOCK(ElectionRound& electionRound, char* citizenId, int partyId) {
     District* district = voter->getDistrict();
     district->addVote(voter, partyId);
     Party* party = electionRound.getPartyByID(partyId);
-    if (!electionRound.isValidParty("vote", party)) return;
+    if (!isValidParty("vote", party)) return;
     party->increaseNumberOfVotes();
 }
 
 void setCitizenAsPartyRepresentiveMOCK(ElectionRound& electionRound, char* representiveId, int partyId, int districtId, int electionRoundType) {
     districtId = (electionRoundType == 0) ? districtId : 1;
     Citizen* citizen = electionRound.getCitizenByID(representiveId);
-    if (!electionRound.isValidCitizen("setCitizenAsPartyRepresentive", citizen) || !electionRound.isValidDistrictId(electionRound.getDistrictLogSize(), districtId)) return;
+    if (!isValidCitizen("setCitizenAsPartyRepresentive", citizen) || !isValidDistrictId(electionRound.getDistrictLogSize(), districtId)) return;
     citizen->setIsPartyMember();
     Party* party = electionRound.getPartyByID(partyId);
-    if (!electionRound.isValidParty("setCitizenAsPartyRepresentive", party)) return;
+    if (!isValidParty("setCitizenAsPartyRepresentive", party)) return;
     party->addRepresentive(districtId, citizen);
 }
 
@@ -195,7 +215,7 @@ void addCitizenMOCK(ElectionRound& electionRound, char* name, char* id, int dist
     if (electionRound.isCitizenIdIsAlreadyExist(id)) return;
     districtNum = (electionRoundType == 0) ? districtNum : 1;
     District* district = electionRound.getDistrictByID(districtNum);
-    if (electionRoundType == 0 && !electionRound.isValidDistrictId(electionRound.getDistrictLogSize(), districtNum)) return;
+    if (electionRoundType == 0 && !isValidDistrictId(electionRound.getDistrictLogSize(), districtNum)) return;
     Citizen* citizen = new Citizen(name, id, birthYear, district);
     electionRound.addCitizen(citizen);
 }
@@ -203,7 +223,7 @@ void addCitizenMOCK(ElectionRound& electionRound, char* name, char* id, int dist
 void addPartyMOCK(ElectionRound& electionRound, char* name, char* id) {
 
     Citizen* head = electionRound.getCitizenByID(id);
-    if (!electionRound.isValidCitizen("addParty", head)) return;
+    if (!isValidCitizen("addParty", head)) return;
     Party* party = new Party(name, head);
     electionRound.addParty(party);
     head->setIsPartyMember();
@@ -216,6 +236,10 @@ void addDistrict(ElectionRound &electionRound) {
     District* district;
     cout << "enter name, number of representative and district type (1 for divided, 0 for unified)";
     cin >> name >> representativeNum >> districtType;
+    if (representativeNum <= 0) {
+        cout << "Sorry a district have a positive number of represenative number" << endl;
+        return;
+    }
     if (districtType == 0) district = new UnifiedDistrict(name, representativeNum);
     else district = new DividedDistrict(name, representativeNum);
     electionRound.addDistrict(district);
@@ -229,7 +253,7 @@ void addCitizen(ElectionRound& electionRound, int electionRoundType) {
     cin >> name >> id >> birthYear >> districtNum;
     districtNum = (electionRoundType == 0) ? districtNum : 1;
     District* district = electionRound.getDistrictByID(districtNum);
-    if (electionRound.isCitizenIdIsAlreadyExist(id) || !electionRound.isValidDistrictId(electionRound.getDistrictLogSize(), districtNum)) return;
+    if (electionRound.isCitizenIdIsAlreadyExist(id) || !isValidDistrictId(electionRound.getDistrictLogSize(), districtNum)) return;
     Citizen* citizen = new Citizen(name, id, birthYear, district);
     electionRound.addCitizen(citizen);
 }
@@ -240,7 +264,7 @@ void addParty(ElectionRound& electionRound) {
     cout << "enter name and the party head's id ";
     cin >> name >> id;
     Citizen* head = electionRound.getCitizenByID(id);
-    if (!electionRound.isValidCitizen("addParty", head)) return;
+    if (!isValidCitizen("addParty", head)) return;
     Party* party = new Party(name, head);
     electionRound.addParty(party);
     head->setIsPartyMember();
@@ -254,10 +278,10 @@ void setCitizenAsPartyRepresentive(ElectionRound& electionRound, int electionRou
     cin >> representiveId >> partyId >> districtId;
     districtId = (electionRoundType == 0) ? districtId : 1;
     Citizen *citizen = electionRound.getCitizenByID(representiveId);
-    if (!electionRound.isValidCitizen("setCitizenAsPartyRepresentive", citizen) || !electionRound.isValidDistrictId(electionRound.getDistrictLogSize(), districtId)) return;
+    if (!isValidCitizen("setCitizenAsPartyRepresentive", citizen) || !isValidDistrictId(electionRound.getDistrictLogSize(), districtId)) return;
     citizen->setIsPartyMember();
     Party *party = electionRound.getPartyByID(partyId);
-    if (!electionRound.isValidParty("setCitizenAsPartyRepresentive", party)) return;
+    if (!isValidParty("setCitizenAsPartyRepresentive", party)) return;
     party->addRepresentive(districtId, citizen);
 }
 
@@ -279,7 +303,7 @@ void vote(ElectionRound& electionRound){
     cout << "enter citizen ID, party ID";
     cin >> citizenId >> partyId;
     Party* party = electionRound.getPartyByID(partyId);
-    if (!electionRound.isValidParty("vote", party)) return;
+    if (!isValidParty("vote", party)) return;
 
     Citizen* voter = electionRound.getCitizenByID(citizenId);
     if (voter == NULL) { 
@@ -319,3 +343,35 @@ void showElectionResults(ElectionRound& electionRound){
 }
 
 
+// ------------------------ validation function -----------------------
+
+
+bool isValidCitizen(const char* action, Citizen* citizen)  {
+    if (citizen == NULL) {
+        cout << action << " -there is no such citizen." << endl;
+        return false;
+    }
+    if (citizen->getIsPartyMember()) {
+        cout << action << " -already set as represantive or head." << endl;
+        return false;
+    }
+    return true;
+}
+
+bool isValidParty(const char* action, Party* party)  {
+    if (party == NULL) {
+        cout << action << " -there is no such party." << endl;
+        return false;
+    }
+    return true;
+}
+
+bool isValidDistrictId(const int districtsLogSize, const int districtId) 
+{
+    if (districtId > districtsLogSize)
+    {
+        cout << "There is no such District." << endl;
+        return false;
+    }
+    return true;
+}

@@ -20,4 +20,7 @@ class CitizenList
         ~CitizenList();
         void addNode(Citizen* citizen);
         void printFirstNRepresantives(const int n);
+        
+        friend ostream& operator<<(ostream&, const CitizenList&);
+
 };

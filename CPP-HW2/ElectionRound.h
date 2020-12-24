@@ -14,21 +14,19 @@ class ElectionRound
 		virtual void addDistrict(District* district);
 		void addCitizen(Citizen* citizen);
 		void addParty(Party* party);
-		Citizen* getCitizenByID(const char* representiveID);
-        Party* getPartyByID(int partyID);
-        District* getDistrictByID(const int districtID);
-        int getDistrictLogSize();
-        int getPartiesLogSize();
-        District** getDistricts();
-		Party** getPartiesArr();
-        virtual void printAllDistricts();
-        void printAllCitizens();
-        void printAllParties();
+		Citizen* getCitizenByID(const char* representiveID) const;
+        Party* getPartyByID(int partyID) const;
+        District* getDistrictByID(const int districtID) const;
+        int getDistrictLogSize() const;
+        int getPartiesLogSize() const;
+        District** getDistricts() const;
+		Party** getPartiesArr() const;
+        virtual void printAllDistricts() const;
+        void printAllCitizens() const;
+        void printAllParties() const;
         Party** getSortedParties();
-		bool isCitizenIdIsAlreadyExist(const char* citizenID);
-		bool isValidCitizen(const char* action, Citizen* citizen);
-		bool isValidParty(const char* action, Party* party);
-		bool isValidDistrictId(const int districtsLogSize, const int districtId);
+		bool isCitizenIdIsAlreadyExist(const char* citizenID) const;
+
 private:
 		struct Date {
 			const int year;

@@ -9,6 +9,7 @@ struct votesPerParty
 {
     int partyIndex;
     int numOfVotes;
+    int size;
 };
 
 class District

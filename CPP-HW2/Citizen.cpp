@@ -5,7 +5,7 @@ using namespace std;
 
 int MAX_STRING_LEN = 100;
 
-char* getString(char* input) {
+char* getString(const char* input) {
 	int inputLen = strlen(input);
 	char* str = new char[inputLen + 1];
 	memcpy(str, input, inputLen);

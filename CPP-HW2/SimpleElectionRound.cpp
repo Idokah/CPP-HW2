@@ -12,7 +12,7 @@ void SimpleElectionRound::addDistrict(District* district)
 	cout << "im sorry but you cant add district, it a simple election round!" << endl;
 }
 
-void SimpleElectionRound::printAllDistricts()
+void SimpleElectionRound::printAllDistricts() const
 {
     cout << "im sorry but you dont have any districts, it a simple election round!" << endl;
 }

@@ -28,13 +28,13 @@ ElectionRound::~ElectionRound()
 
 void ElectionRound::addDistrict(District* district){}
 
-District** ElectionRound::getDistricts(){ return this->districts; }
+District** ElectionRound::getDistricts() const { return this->districts; }
 
-int ElectionRound::getDistrictLogSize(){ return this->districtsLogSize; }
+int ElectionRound::getDistrictLogSize() const { return this->districtsLogSize; }
 
-int ElectionRound::getPartiesLogSize(){ return this->partiesLogSize; }
+int ElectionRound::getPartiesLogSize() const { return this->partiesLogSize; }
 
-Party** ElectionRound::getPartiesArr()
+Party** ElectionRound::getPartiesArr() const
 {
     return parties;
 }
@@ -91,7 +91,7 @@ void ElectionRound::increasePartiesArrSize() {
     this->parties = newParties;
 }
 
-Citizen* ElectionRound::getCitizenByID(const char* representiveID)
+Citizen* ElectionRound::getCitizenByID(const char* representiveID) const
 {
 	for (int i = 0; i < votersLogSize; ++i)
 	{
@@ -102,7 +102,7 @@ Citizen* ElectionRound::getCitizenByID(const char* representiveID)
 	return nullptr;
 }
 
-Party* ElectionRound::getPartyByID(int partyId)
+Party* ElectionRound::getPartyByID(int partyId) const
 {
     for (int i = 0; i < this->partiesLogSize; ++i)
     {
@@ -113,7 +113,7 @@ Party* ElectionRound::getPartyByID(int partyId)
     return nullptr;
 }
 
-District* ElectionRound::getDistrictByID(const int districtID)
+District* ElectionRound::getDistrictByID(const int districtID) const
 {
     for (int i = 0; i < this->districtsLogSize; ++i)
     {
@@ -124,22 +124,21 @@ District* ElectionRound::getDistrictByID(const int districtID)
     return nullptr;
 }
 
-void ElectionRound::printAllDistricts() {}
+void ElectionRound::printAllDistricts() const {}
 
-void ElectionRound::printAllCitizens()
+void ElectionRound::printAllCitizens() const
 {
     for (int i = 0; i < votersLogSize; ++i) {
         cout<<*(votersBook[i])<<endl;
     }
 }
 
-void ElectionRound::printAllParties()
+void ElectionRound::printAllParties() const
 {
     for (int i = 0; i < partiesLogSize; ++i) {
         cout << *(parties[i])<<endl;
     }
 }
-
 
 Party** ElectionRound::getSortedParties()
 {
@@ -151,7 +150,7 @@ Party** ElectionRound::getSortedParties()
     return partiesPointers;
 }
 
-bool ElectionRound::isCitizenIdIsAlreadyExist(const char* citizenID)
+bool ElectionRound::isCitizenIdIsAlreadyExist(const char* citizenID) const
 {
     for (int i = 0; i < votersLogSize; i++)
     {
@@ -219,35 +218,3 @@ void ElectionRound::merge(Party** pointersArr1, Party** pointersArr2,int size1,i
     }
 }
 
-
-// ------------------------ validation function -----------------------
-
-bool ElectionRound::isValidCitizen(const char* action, Citizen* citizen) {
-    if (citizen == NULL) {
-        cout << action << " -there is no such citizen." << endl;
-        return false;
-    }
-    if (citizen->getIsPartyMember()) {
-        cout << action << " -already set as represantive or head." << endl;
-        return false;
-    }
-    return true;
-}
-
-bool ElectionRound::isValidParty(const char* action, Party* party) {
-    if (party == NULL) {
-        cout << action << " -there is no such party." << endl;
-        return false;
-    }
-    return true;
-}
-
-bool ElectionRound::isValidDistrictId(const int districtsLogSize, const int districtId)
-{
-    if (districtId > districtsLogSize)
-    {
-        cout << "There is no such District." << endl;
-        return false;
-    }
-    return true;
-}

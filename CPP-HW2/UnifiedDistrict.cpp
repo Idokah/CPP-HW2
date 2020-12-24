@@ -11,7 +11,7 @@ void UnifiedDistrict::printType(std::ostream& os) const
 void UnifiedDistrict::printElectionResult(int partiesLogSize, Party** parties)
 {
 	Party* winningParty;
-    char* headName;
+    const char* headName;
     winningParty = parties[this->getWinningParty()-1];
     headName = winningParty->getPartyHead()->getName();
     cout << "--- the winning party head --- " << endl;

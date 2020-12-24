@@ -50,3 +50,14 @@ void CitizenList::printFirstNRepresantives(const int n)
     }
     if (i < n) cout << "            there aren't enough represantives" << endl;
 }
+
+ostream& operator<<(ostream& os, const CitizenList& citizenList)
+{
+    node* curr = citizenList.head;
+    while (curr != nullptr)
+    {
+        cout << *(curr->citizen) << endl;
+        curr = curr->next;
+    }
+    return os;
+}

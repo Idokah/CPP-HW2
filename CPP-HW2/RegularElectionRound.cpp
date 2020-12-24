@@ -11,7 +11,7 @@ void RegularElectionRound::addDistrict(District* district)
 	this->districts[this->districtsLogSize++] = district;
 }
 
-void RegularElectionRound::printAllDistricts()
+void RegularElectionRound::printAllDistricts () const
 {
 	for (int i = 0; i < districtsLogSize; ++i) {
 		cout << *(districts[i]) << endl;

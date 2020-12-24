@@ -1,10 +1,10 @@
 #include "Party.h"
 
-char* getString(char* input);
+char* getString(const char* input);
 
 Party::Party(){}
 
-Party::Party(char* name, Citizen* head) : sizeRepresentivesArr(1), numberOfVotes(0),numberOfWinningRepresantives(0)
+Party::Party(const char* name, const Citizen* head) : sizeRepresentivesArr(1), numberOfVotes(0),numberOfWinningRepresantives(0)
 {
 	this->name = getString(name);
 	this->partyHead=head;
@@ -17,7 +17,7 @@ Party::Party(const Party& other)
     *this = other;
 }
 
-void Party::operator=(const Party& other) {
+Party& Party::operator=(const Party& other) {
     this->id = other.id;
     this->name = getString(other.name);
     this->sizeRepresentivesArr = other.sizeRepresentivesArr;
@@ -26,6 +26,7 @@ void Party::operator=(const Party& other) {
     this->numberOfVotes = other.numberOfVotes;
     this->numberOfWinningRepresantives=other.numberOfWinningRepresantives;
     memcpy(this->representivesArr, other.representivesArr, sizeof(CitizenList) * other.sizeRepresentivesArr);
+    return *this;
 }
 
 Party::~Party() {
@@ -33,7 +34,7 @@ Party::~Party() {
    delete[] representivesArr;
 }
 
-Citizen* Party::getPartyHead(){ return this->partyHead; }
+const Citizen* Party::getPartyHead(){ return this->partyHead; }
 
 int Party::generateID()
 {
@@ -62,9 +63,9 @@ void Party::increaseArrSize(const int newSize) {
     delete[] this->representivesArr;
     this->representivesArr = newArr;
 }
-char* Party::getName() { return this->name; }
+const char* Party::getName() { return this->name; }
 
-char* Party::getName() const { return this->name; }
+const char* Party::getName() const { return this->name; }
 
 void Party::increaseNumberOfVotes() { this->numberOfVotes++; }
 
@@ -78,7 +79,7 @@ void Party::printNRepresantive(const int districtID,const int n)
         cout << "            there aren't enough represantives" << endl;
         return;
     }
-    representivesArr[districtID].printFirstNRepresantives(n); 
+    representivesArr[districtID-1].printFirstNRepresantives(n); //changed to -1 dont sure 
 }
 
 void Party::increaseNumberOfWinningRepresentives(const int n) { this->numberOfWinningRepresantives+=n; }
@@ -87,6 +88,12 @@ int Party::getNumberOfWinningRepresantives(){ return this->numberOfWinningRepres
 
 ostream& operator<<(ostream& os, const Party& party)
 {
-    os << "Party Name: " << party.getName() << ", head name : " << party.getPartyHeadName();
+    os << "Party ID:" << party.getID() << "Party Name: " << party.getName() 
+        << ", head name : " << party.getPartyHeadName() ;
+    for (int i = 0; i < party.sizeRepresentivesArr; i++)
+    {
+        cout << "representatives for district number " << i+1<<endl;
+        cout << party.representivesArr[i];
+    }
     return os;
 }

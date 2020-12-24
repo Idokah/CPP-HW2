@@ -5,16 +5,21 @@
 
 using namespace std;
 
-char* getString(char* input);
+char* getString(const char* input);
 
-District::District() {}
+District::District(): votersPercentage(0), electionResultsSize(0), voteCount(0), citizenNum(0) {
+    this->name = nullptr;
+    this->id = -1; 
+    this->representativeNum = 0;
+    this->electionResults = nullptr;
+}
 
 District::District(char *name, int representativeNum):
         votersPercentage(0), electionResultsSize(1), voteCount(0), citizenNum(0) {
 	this->name = getString(name);
 	this->id = this-> generateID();
 	this->representativeNum = representativeNum;
-    this->electionResults =new int[electionResultsSize];
+    this->electionResults = new int[electionResultsSize];
     for (int i = 0; i < this->electionResultsSize ; ++i) {
         this->electionResults[i]=0;
     }
@@ -44,6 +49,7 @@ District::District(const District& other)
 void District::operator=(const District& other)
 {
     this->voteCount=other.voteCount;
+    if (this->name!=nullptr) delete[] name;
     this->name = getString(other.name);
     this->id = other.id;
     this->citizenNum=other.citizenNum;
@@ -146,7 +152,7 @@ float District::getVotePercentage()
 
 ostream& operator<<(ostream& os, const District& district)
 {
-    os << "District Name: " << district.getName() << ", num of representative: " << district.getRepresentativeNum()<<" ";
+    os << "District ID "<<district.id << " District Name: " << district.getName() << ", num of representative: " << district.getRepresentativeNum()<<" ";
     district.printType(os);
     return os;
 }
@@ -166,7 +172,7 @@ void District::printElectionResult(int partiesLogSize, Party** parties)
     votesPerParty* votersPerParty = this->getPartiesSortedByVotes(this->getElectionResults(), numOfParties);
 
     for (int j = 0; j < partiesLogSize; ++j) {
-        partyIndex = votersPerParty[j].partyIndex;
+        partyIndex = votersPerParty->size > j ? votersPerParty[j].partyIndex : j;
         cout << "    " << *(parties[partyIndex]) << endl;
         if (j < numOfExistsPartiesInDistrict)
         {
@@ -188,6 +194,7 @@ void District::printElectionResult(int partiesLogSize, Party** parties)
 votesPerParty* District::getPartiesSortedByVotes(int* electionResult, int electionResultLogSize)
 {
     votesPerParty* votesPerPartyArr = new votesPerParty[electionResultLogSize];
+    votesPerPartyArr->size = electionResultLogSize;
     for (int i = 0; i < electionResultLogSize; i++)
     {
         votesPerPartyArr[i] = { i,electionResult[i] };
