@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Party.h"
-#include "Enums.h"
+#include "consts.h"
 
 using namespace std;
 

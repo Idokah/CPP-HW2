@@ -36,7 +36,7 @@
     <ClInclude Include="District.h" />
     <ClInclude Include="DividedDistrict.h" />
     <ClInclude Include="ElectionRound.h" />
-    <ClInclude Include="Enums.h" />
+    <ClInclude Include="consts.h" />
     <ClInclude Include="Party.h" />
     <ClInclude Include="RegularElectionRound.h" />
     <ClInclude Include="SimpleElectionRound.h" />

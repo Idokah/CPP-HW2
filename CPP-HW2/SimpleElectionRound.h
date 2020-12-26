@@ -8,7 +8,9 @@
 
 class SimpleElectionRound : public ElectionRound {
 	public:
+		SimpleElectionRound();
 		SimpleElectionRound(int day, int month, int year);
+		SimpleElectionRound(istream& in);
 		virtual void addDistrict(District* district);
 		virtual void printAllDistricts() const;
 		void save(ostream& out) const;

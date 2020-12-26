@@ -8,7 +8,9 @@
 
 class RegularElectionRound : public ElectionRound {
 	public:
+		RegularElectionRound();
 		RegularElectionRound(int day, int month, int year);
+		RegularElectionRound(istream& in);
 		virtual void addDistrict(District* district);
 		virtual void printAllDistricts() const;
 		void save(ostream& out) const;

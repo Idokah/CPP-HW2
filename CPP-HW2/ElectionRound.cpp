@@ -1,5 +1,11 @@
 #include "ElectionRound.h"
 #include "District.h"
+#include "DividedDistrict.h"
+#include "UnifiedDistrict.h"
+
+ElectionRound::ElectionRound()
+{
+}
 
 ElectionRound::ElectionRound(const int day, const int month, const int year) : date({ day, month, year }), districtsLogSize(0), districtsPhySize(1), votersLogSize(0), votersPhySize(1), partiesPhySize(1), partiesLogSize(0)
 {
@@ -218,11 +224,16 @@ void ElectionRound::merge(Party** pointersArr1, Party** pointersArr2,int size1,i
 
 void ElectionRound::save(ostream& out) const
 {
-    
     District** districts;
     Citizen** votersBook;
     Party** parties;
     this->date.save(out);
+
+    out.write(rcastcc(&this->districtsLogSize), sizeof(this->districtsLogSize));
+    out.write(rcastcc(&this->districtsPhySize), sizeof(this->districtsPhySize));
+    for (int i = 0; i < this->districtsLogSize; i++)
+        this->districts[i]->save(out);
+
     out.write(rcastcc(&this->votersLogSize), sizeof(this->votersLogSize));
     out.write(rcastcc(&this->votersPhySize), sizeof(this->votersPhySize));
     for (int i = 0; i < this->votersLogSize; i++)
@@ -232,11 +243,6 @@ void ElectionRound::save(ostream& out) const
     out.write(rcastcc(&this->partiesPhySize), sizeof(this->partiesPhySize));
     for (int i = 0; i < this->partiesLogSize; i++)
         this->parties[i]->save(out);
-
-    out.write(rcastcc(&this->districtsLogSize), sizeof(this->districtsLogSize));
-    out.write(rcastcc(&this->districtsPhySize), sizeof(this->districtsPhySize));
-    for (int i = 0; i < this->districtsLogSize; i++)
-        this->districts[i]->save(out);
 }
 
 void ElectionRound::Date::save(ostream& out) const
@@ -244,4 +250,57 @@ void ElectionRound::Date::save(ostream& out) const
     out.write(rcastcc(&year), sizeof(year));
     out.write(rcastcc(&month), sizeof(month));
     out.write(rcastcc(&day), sizeof(day));
+}
+
+void ElectionRound::load(istream& in)
+{
+    District** districts;
+    Citizen** votersBook;
+    Party** parties;
+
+    
+    int day, month, year;
+    in.read(rcastc(&year), sizeof(year));
+    in.read(rcastc(&month), sizeof(month));
+    in.read(rcastc(&day), sizeof(day));
+    this->date.year = year;
+    this->date.month = month;
+    this->date.day = day;
+
+    in.read(rcastc(&this->districtsLogSize), sizeof(this->districtsLogSize));
+    in.read(rcastc(&this->districtsPhySize), sizeof(this->districtsPhySize));
+    this->districts = new District * [this->districtsPhySize];
+    int typenum;
+    DISTRICT_TYPE type;
+    for (int i = 0; i < this->districtsLogSize; i++)
+    {
+        in.read(rcastc(&typenum), sizeof(typenum));
+        type = (DISTRICT_TYPE)typenum;
+        switch (type) {
+        case DISTRICT_TYPE::divided:
+            this->districts[i] = new DividedDistrict(in);
+            break;
+        case DISTRICT_TYPE::unified:
+            this->districts[i] = new UnifiedDistrict(in);
+            break;
+        }
+    }
+
+    in.read(rcastc(&this->votersLogSize), sizeof(this->votersLogSize));
+    in.read(rcastc(&this->votersPhySize), sizeof(this->votersPhySize));
+    this->votersBook = new Citizen* [this->votersPhySize];
+    for (int i = 0; i < this->votersLogSize; i++)
+    {
+        //this->votersBook[i]->load(in);
+        this->votersBook[i] = new Citizen(in,this->districts, this->districtsLogSize);
+    }
+
+    in.read(rcastc(&this->partiesLogSize), sizeof(this->partiesLogSize));
+    in.read(rcastc(&this->partiesPhySize), sizeof(this->partiesPhySize));
+    this->parties = new Party * [this->partiesPhySize];
+    for (int i = 0; i < this->partiesLogSize; i++)
+    {
+        //this->parties[i]->load(in);
+        this->parties[i] = new Party(in, this->votersBook,this->votersLogSize);
+    }
 }

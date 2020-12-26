@@ -1,6 +1,15 @@
 #include "RegularElectionRound.h"
+// TODO
+RegularElectionRound::RegularElectionRound()
+{
+}
 
 RegularElectionRound::RegularElectionRound(int day, int month, int year) : ElectionRound(day, month, year) {}
+
+RegularElectionRound::RegularElectionRound(istream& in)
+{
+	this->load(in);
+}
 
 void RegularElectionRound::addDistrict(District* district)
 {
@@ -20,6 +29,7 @@ void RegularElectionRound::printAllDistricts () const
 
 void RegularElectionRound::save(ostream& out) const
 {
-	out.write(rcastcc(ELECTION_ROUND_TYPE::regular), sizeof(ELECTION_ROUND_TYPE::regular));
+	int type = (int)ELECTION_ROUND_TYPE::regular;
+	out.write(rcastcc(&type), sizeof(type));
 	this->ElectionRound::save(out);
 }

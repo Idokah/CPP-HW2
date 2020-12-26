@@ -10,7 +10,7 @@ struct node
     node *next;
 
     void save(ostream& out) const;
-    void load(istream &in);
+    void load(istream &in, District** districts, int districtsSize);
 };
 
 
@@ -22,12 +22,14 @@ class CitizenList
         node* createNewNode(Citizen* citizen);
     public:
         CitizenList();
+        CitizenList(istream& in, Citizen** citizens, int citizensSize);
         ~CitizenList();
         void addNode(Citizen* citizen);
         void printFirstNRepresantives(const int n);
 
         void save(ostream& out) const;
-        void load(istream &in);
+        void load(istream& in, Citizen** citizens, int citizensSize);
+        void saveIDs (ostream& out) const;
 
         friend ostream& operator<<(ostream&, const CitizenList&);
 };

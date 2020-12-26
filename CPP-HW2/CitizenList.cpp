@@ -1,4 +1,5 @@
 #include "CitizenList.h"
+#include "consts.h"
 
 node* CitizenList::createNewNode(Citizen* citizen){
     node* newNode = new node();
@@ -10,6 +11,11 @@ node* CitizenList::createNewNode(Citizen* citizen){
 CitizenList::CitizenList() : len(0) {
     this->head = NULL;
     this->tail = NULL;
+}
+
+CitizenList::CitizenList(istream& in, Citizen** citizens, int citizensSize) : CitizenList()
+{
+    this->load(in,citizens,citizensSize);
 }
 
 CitizenList::~CitizenList()
@@ -74,10 +80,39 @@ void CitizenList::save(ostream& out) const
     }
 }
 
-void CitizenList::load(istream &in) {
+
+void CitizenList::load(istream& in, Citizen** citizens, int citizensSize) {
+    
     in.read(rcastc(&this->len), sizeof(this->len));
+    int idLen;
+    char citizenId[MAX_STRING_LEN];
     for (int i = 0; i < this->len; ++i) {
-        this->addNode(new Citizen(in));
+        in.read(rcastc(&idLen), sizeof(idLen));
+        in.read(rcastc(citizenId), sizeof(char) * idLen);
+        citizenId[idLen] = '\0';
+        for (int i = 0; i < citizensSize; i++)
+        {
+            if (strcmp(citizens[i]->getID(), citizenId) == 0)
+            {
+                this->addNode(citizens[i]);
+                break;
+            }
+        }
+    }
+}
+
+void CitizenList::saveIDs(ostream& out) const
+{
+    node* curr = this->head;
+    out.write(rcastcc(&this->len), sizeof(this->len));
+    char* citizenID;
+    int idLen;
+    for (int i = 0; i < this->len; i++)
+    {
+        citizenID = curr->citizen->getID();
+        idLen = strlen(citizenID);
+        out.write(rcastcc(&idLen), sizeof(idLen));
+        out.write(rcastcc(citizenID), sizeof(char) * idLen);
     }
 }
 
@@ -86,6 +121,6 @@ void node::save(ostream& out) const
     this->citizen->save(out);
 }
 
-void node::load(istream &in) {
-    this->citizen->load(in);
+void node::load(istream &in, District** districts, int districtsSize) {
+    this->citizen->load(in, districts,districtsSize);
 }

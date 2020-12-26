@@ -7,7 +7,8 @@ using namespace std;
 class Party {
 	public:
 		Party();
-		Party(const char* name, const Citizen* head);
+		Party(istream& in,Citizen** citizens, int citizensSize);
+		Party(const char* name, Citizen* head);
 		Party(const Party& other);
 		~Party();
 		int getID() const;
@@ -24,13 +25,13 @@ class Party {
         int getNumberOfWinningRepresantives();
 
 		void save(ostream& out) const;
-        void load(istream &in);
+		void load(istream& in, Citizen** citizens, int citizensSize);
 
 		friend ostream& operator<<(ostream&, const Party&);
 
     private:
 		char* name;
-		const Citizen* partyHead;
+		Citizen* partyHead;
 		int id;
 		CitizenList* representivesArr; 
         int sizeRepresentivesArr;

@@ -1,12 +1,14 @@
 ﻿#include <iostream>
+#include <fstream>
 #include "Citizen.h"
 #include "UnifiedDistrict.h"
 #include "DividedDistrict.h"
 #include "SimpleElectionRound.h"
 #include "RegularElectionRound.h"
 #include "Party.h"
-#include "Enums.h"
+#include "consts.h"
 
+//TODO - free all new
 
 void addDistrict(ElectionRound& electionRound);
 void addCitizen(ElectionRound& electionRound, ELECTION_ROUND_TYPE electionRoundType);
@@ -17,6 +19,8 @@ void printAllCitizens(ElectionRound& electionRound);
 void printAllParties(ElectionRound& electionRound);
 void vote(ElectionRound& electionRound);
 void showElectionResults(ElectionRound& electionRound);
+void loadElectionRound(ElectionRound* &electionRound);
+void saveElectionRound(ElectionRound* electionRound);
 bool isValidCitizen(const char* action, Citizen* citizen);
 bool isValidParty(const char* action, Party* party);
 bool isValidDistrictId(const int districtsLogSize, const int districtId);
@@ -30,42 +34,59 @@ void setCitizenAsPartyRepresentiveMOCK(ElectionRound& electionRound, char* repre
 using namespace std;
 
 enum class OPTIONS {
-     addDistrict=1,
-     addCitizen=2,
-     addParty=3,
-     addCitizenAsPartyRepresentive=4,
-     showAllDistricts=5,
-     showAllCitizens=6,
-     showAllParties=7,
-     vote=8,
-     showElectionResults=9,
-     exit=10
+    addDistrict = 1,
+    addCitizen = 2,
+    addParty = 3,
+    addCitizenAsPartyRepresentive = 4,
+    showAllDistricts = 5,
+    showAllCitizens = 6,
+    showAllParties = 7,
+    vote = 8,
+    showElectionResults = 9,
+    exit = 10,
+    saveElectionRound = 11,
+    loadElectionRound = 12
+};
+
+enum class ELECTION_ROUND_OPTIONS {
+    newElectionRound = 1,
+    loadElectionRound = 2
 };
 
 
-
-const int MAX_STRING_LEN = 100;
-
 int main()
 {
+    ElectionRound* electionRound=nullptr;
     OPTIONS option=OPTIONS::showElectionResults;
+    ELECTION_ROUND_OPTIONS electionRoundOption=ELECTION_ROUND_OPTIONS::newElectionRound;
     int day = 1, month = 1, year = 1, electionRoundTypeNum = 0;
     ELECTION_ROUND_TYPE electionRoundType;
-    int optionNum;
-	//cout << "enter elections date DD MM YYYY ";
-	//cin >> day >> month >> year;
-
-    //cout << "enter elections round type (0 for regular, 1 for simple)";
-    //cin >> electionRoundType;
-    electionRoundType = (ELECTION_ROUND_TYPE)electionRoundTypeNum;
-
-
-
-    ElectionRound* electionRound;
-    if (electionRoundType == ELECTION_ROUND_TYPE::regular) electionRound = new RegularElectionRound(day, month, year);
-    else electionRound = new SimpleElectionRound(day, month, year);
-
-
+    int optionNum, electionRoundOptionNum = 0;
+    
+    cout << "enter one of the options-" << endl
+        << "1 - add new election round" << endl
+        << "2- load election round" << endl;
+    cin >> electionRoundOptionNum;
+    electionRoundOption = (ELECTION_ROUND_OPTIONS)electionRoundOptionNum;
+    switch (electionRoundOption)
+    {
+        case ELECTION_ROUND_OPTIONS::newElectionRound:
+        {
+            /*cout << "enter elections date DD MM YYYY ";
+            cin >> day >> month >> year;*/
+            //cout << "enter elections round type (0 for regular, 1 for simple)";
+            //cin >> electionRoundTypeNum;
+            electionRoundType = (ELECTION_ROUND_TYPE)electionRoundTypeNum;
+            if (electionRoundType == ELECTION_ROUND_TYPE::regular) electionRound = new RegularElectionRound(day, month, year);
+            else electionRound = new SimpleElectionRound(day, month, year);
+            break;
+        }
+        case ELECTION_ROUND_OPTIONS::loadElectionRound:
+        {
+            loadElectionRound(electionRound);
+        }
+    }
+    
     addDistrictMOCK(*electionRound, const_cast<char*>("A"), 4,DISTRICT_TYPE::divided);
     addDistrictMOCK(*electionRound, const_cast<char*>("B"), 10, DISTRICT_TYPE::divided);
     addDistrictMOCK(*electionRound, const_cast<char*>("C"), 2, DISTRICT_TYPE::unified);
@@ -135,19 +156,20 @@ int main()
     voteMOCK(*electionRound, const_cast<char*>("29"), 3);
     voteMOCK(*electionRound, const_cast<char*>("210"), 3);
 
-
     while (option != OPTIONS::exit) {
         cout << "enter one of the options-" << endl
-             << "1 - add district" << endl
-             << "2- add citizen" << endl
-             << "3- add party" << endl
-             << "4- add citizen as party representive" << endl
-             << "5- show all districts" << endl
-             << "6- show all citizens" << endl
-             << "7- show all parties" << endl
-             << "8- vote" << endl
-             << "9- show election results" << endl
-             << "10- exit the program" << endl;
+            << "1 - add district" << endl
+            << "2- add citizen" << endl
+            << "3- add party" << endl
+            << "4- add citizen as party representive" << endl
+            << "5- show all districts" << endl
+            << "6- show all citizens" << endl
+            << "7- show all parties" << endl
+            << "8- vote" << endl
+            << "9- show election results" << endl
+            << "10- exit the program" << endl
+            << "11- save the election round" << endl
+            << "12- load exist election round" << endl;
 
         cin >> optionNum;
         option = (OPTIONS)optionNum;
@@ -183,6 +205,12 @@ int main()
                 break;
             case OPTIONS::exit:
                 cout << "see you soon" << endl;
+                break;
+            case OPTIONS::saveElectionRound:
+                saveElectionRound(electionRound);
+                break;
+            case OPTIONS::loadElectionRound:
+                loadElectionRound(electionRound);
                 break;
         }
     }
@@ -351,6 +379,47 @@ void showElectionResults(ElectionRound& electionRound){
     delete[] parties;
 }
 
+void loadElectionRound(ElectionRound* &electionRound)
+{
+    char hara;
+    int typenum;
+    ELECTION_ROUND_TYPE type;
+    char fileName[MAX_STRING_LEN];
+    //cout << "enter file name ";
+    //cin >> fileName;
+    ifstream infile(const_cast < char*>("romi"), ios::binary);
+    if (!infile) {
+        cout << "Error with infile" << endl;
+        exit(-1);
+    }
+    infile.read(&hara, 1);
+    infile.read(rcastc(&typenum), sizeof(typenum));
+    type = (ELECTION_ROUND_TYPE)typenum;
+    switch (type) {
+    case ELECTION_ROUND_TYPE::regular:
+        electionRound = new RegularElectionRound(infile);
+        break;
+    case ELECTION_ROUND_TYPE::simple:
+        electionRound = new SimpleElectionRound(infile);
+        break;
+    }
+    infile.close();
+}
+
+void saveElectionRound(ElectionRound* electionRound)
+{
+    char fileName[MAX_STRING_LEN];
+    cout << "enter file name ";
+   // cin >> fileName;
+    ofstream outfile(const_cast < char*>("romi"), ios::binary | ios::trunc);
+    outfile.write(fileName, sizeof(char));
+    if (!outfile) {
+        cout << "Error with infile" << endl;
+        exit(-1);
+    }
+    electionRound->save(outfile);
+    outfile.close();
+}
 
 // ------------------------ validation function -----------------------
 

@@ -274,10 +274,9 @@ void District::save(ostream& out) const
 
 void District::load(istream& in)
 {
-
     int nameLen;
     in.read(rcastc(&nameLen), sizeof(nameLen));
-    this->name = new char(nameLen + 1);
+    this->name = new char[nameLen + 1];
     this->name[nameLen] = '\0';
     in.read(rcastc(this->name), sizeof(char) * nameLen);
     in.read(rcastc(&this->id), sizeof(this->id));
@@ -287,8 +286,7 @@ void District::load(istream& in)
 
     int electionResultsLen;
     in.read(rcastc(&electionResultsLen), sizeof(electionResultsLen));
-    this->electionResults = new int(electionResultsLen);
+    this->electionResults = new int[electionResultsLen];
     in.read(rcastc(this->electionResults), sizeof(int) * electionResultsLen);
-
 }
 

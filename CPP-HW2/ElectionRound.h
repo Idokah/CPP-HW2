@@ -3,7 +3,7 @@
 #include "Citizen.h"
 #include "District.h"
 #include "Party.h"
-#include "Enums.h"
+#include "consts.h"
 
 #define rcastcc reinterpret_cast<const char*>
 #define rcastc reinterpret_cast<char*>
@@ -11,6 +11,7 @@
 class ElectionRound
 {
 	public:
+		ElectionRound();
 		ElectionRound(const int day, const int month,const int year);
         ElectionRound(ElectionRound& electionRound) = delete;
         void operator=(const ElectionRound& other) = delete;
@@ -32,11 +33,13 @@ class ElectionRound
 		bool isCitizenIdIsAlreadyExist(const char* citizenID) const;
 		virtual void save(ostream& out) const;
 
+		void load(istream& in);
+
 private:
 		struct Date {
-			const int year;
-            const int month;
-            const int day;
+			int year;
+            int month;
+            int day;
 			void save(ostream& out) const;
 		};
 		Date date;
@@ -54,11 +57,11 @@ private:
 		
         void mergeSort(Party** pointersArr, int size);
 		void merge(Party** pointersArr1, Party** pointersArr2, int size1, int size2, Party** res);
-protected:
-	// districts
-	int districtsLogSize;
-	int districtsPhySize;
-	District** districts;
-	void increaseDistrictsArrSize();
+	protected:
+		// districts
+		int districtsLogSize;
+		int districtsPhySize;
+		District** districts;
+		void increaseDistrictsArrSize();
 };
 

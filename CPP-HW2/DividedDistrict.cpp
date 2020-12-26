@@ -1,5 +1,14 @@
 #include "DividedDistrict.h"
 
+DividedDistrict::DividedDistrict()
+{
+}
+
+DividedDistrict::DividedDistrict(istream& in)
+{
+    this->load(in);
+}
+
 DividedDistrict::DividedDistrict(char* name, int representativeNum) : District(name, representativeNum) {}
 
 void DividedDistrict::printType(std::ostream& os) const
@@ -31,26 +40,13 @@ void DividedDistrict::printElectionResult(int partiesLogSize, Party** parties)
 
 void DividedDistrict::save(ostream& out) const
 {
-    out.write(rcastcc(DISTRICT_TYPE::divided), sizeof(DISTRICT_TYPE::divided));
+    int type = (int)DISTRICT_TYPE::divided;
+    out.write(rcastcc(&type), sizeof(type));
     this->District::save(out);
 }
 
 void DividedDistrict::load(istream& in)
 {
-
-    int nameLen;
-    in.read(rcastc(&nameLen), sizeof(nameLen));
-    this->name = new char(nameLen + 1);
-    this->name[nameLen] = '\0';
-    in.read(rcastc(this->name), sizeof(char) * nameLen);
-    in.read(rcastc(&this->id), sizeof(this->id));
-    in.read(rcastc(&this->citizenNum), sizeof(this->citizenNum));
-    in.read(rcastc(&this->votersPercentage), sizeof(this->votersPercentage));
-    in.read(rcastc(&this->voteCount), sizeof(this->voteCount));
-
-    int electionResultsLen;
-    in.read(rcastc(&electionResultsLen), sizeof(electionResultsLen));
-    this->electionResults = new int(electionResultsLen);
-    in.read(rcastc(this->electionResults), sizeof(int) * electionResultsLen);
+    this->District::load(in);
 
 }

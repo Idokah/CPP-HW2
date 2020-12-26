@@ -2,12 +2,17 @@
 
 char* getString(const char* input);
 
-Party::Party(){}
+Party::Party() :id(0),name(nullptr),partyHead(nullptr),representivesArr(nullptr),numberOfVotes(0),numberOfWinningRepresantives(0),sizeRepresentivesArr(0) {}
 
-Party::Party(const char* name, const Citizen* head) : sizeRepresentivesArr(1), numberOfVotes(0),numberOfWinningRepresantives(0)
+Party::Party(istream& in, Citizen** citizens, int citizensSize) :Party()
+{
+    this->load(in, citizens, citizensSize);
+}
+
+Party::Party(const char* name, Citizen* head) : sizeRepresentivesArr(1), numberOfVotes(0),numberOfWinningRepresantives(0)
 {
 	this->name = getString(name);
-	this->partyHead=head;
+	this->partyHead = head;
 	this->id = this->generateID();
 	this->representivesArr= new CitizenList[sizeRepresentivesArr];
 }
@@ -103,25 +108,51 @@ void Party::save(ostream& out) const
     int nameLen = strlen(this->name);
     out.write(rcastcc(&nameLen), sizeof(nameLen));
     out.write(rcastcc(this->name), sizeof(char) * nameLen);
-    this->partyHead->save(out);
-
+    char* partyHeadID = this->partyHead->getID();
+    int partyHeadIDLen = strlen(partyHeadID);
+    out.write(rcastcc(&partyHeadIDLen), sizeof(partyHeadIDLen));
+    out.write(rcastcc(partyHeadID), sizeof(char) * partyHeadIDLen);
     out.write(rcastcc(&this->id), sizeof(id));
-    this->representivesArr->save(out);
+
     out.write(rcastcc(&this->sizeRepresentivesArr), sizeof(sizeRepresentivesArr));
+    for (int i = 0; i < sizeRepresentivesArr; i++)
+        representivesArr[i].saveIDs(out);
+   
     out.write(rcastcc(&this->numberOfVotes), sizeof(numberOfVotes));
     out.write(rcastcc(&this->numberOfWinningRepresantives), sizeof(numberOfWinningRepresantives));
 
 }
 
-void Party::load(istream& in){
-    int nameLen = strlen(this->name);
-    in.read(rcastc(&nameLen), sizeof(nameLen));
-    in.read(rcastc(this->name), sizeof(char) * nameLen);
-    this->partyHead->load(in);
+void Party::load(istream& in, Citizen** citizens, int citizensSize)
+{
+    int nameLen, partyHeadIDLen;
 
+    in.read(rcastc(&nameLen), sizeof(nameLen));
+    this->name = new char[nameLen + 1];
+    this->name[nameLen] = '\0';
+    in.read(rcastc(this->name), sizeof(char) * nameLen);
+
+    in.read(rcastc(&partyHeadIDLen), sizeof(partyHeadIDLen));
+    char* partyHeadID = new char[partyHeadIDLen];
+    partyHeadID[partyHeadIDLen] = '\0';
+    in.read(rcastc(partyHeadID), sizeof(char) * partyHeadIDLen);
+
+    for (int i = 0; i < citizensSize; i++)
+    {
+        if (strcmp(citizens[i]->getID(), partyHeadID) == 0)
+        {
+            this->partyHead = citizens[i];
+            break;
+        }
+    }
+    
     in.read(rcastc(&this->id), sizeof(id));
-    this->representivesArr->load(in);
+
     in.read(rcastc(&this->sizeRepresentivesArr), sizeof(sizeRepresentivesArr));
+    this->representivesArr = new CitizenList[sizeRepresentivesArr];
+    for (int i = 0; i < this->sizeRepresentivesArr; i++)
+        this->representivesArr[i] = CitizenList(in, citizens, citizensSize);
+
     in.read(rcastc(&this->numberOfVotes), sizeof(numberOfVotes));
     in.read(rcastc(&this->numberOfWinningRepresantives), sizeof(numberOfWinningRepresantives));
 }
