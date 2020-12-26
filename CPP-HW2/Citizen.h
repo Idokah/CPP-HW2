@@ -37,6 +37,4 @@ class Citizen
 		District* district;
 		bool isPartyMember; ////head or represantive
         bool isAlreadyVote;
-
-
 };

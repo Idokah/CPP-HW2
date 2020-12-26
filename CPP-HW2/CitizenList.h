@@ -10,12 +10,15 @@ struct node
     node *next;
 
     void save(ostream& out) const;
+    void load(istream &in);
 };
+
 
 class CitizenList
 {
     private:
         node *head,*tail;
+        int len;
         node* createNewNode(Citizen* citizen);
     public:
         CitizenList();
@@ -24,7 +27,7 @@ class CitizenList
         void printFirstNRepresantives(const int n);
 
         void save(ostream& out) const;
-        
-        friend ostream& operator<<(ostream&, const CitizenList&);
+        void load(istream &in);
 
+        friend ostream& operator<<(ostream&, const CitizenList&);
 };

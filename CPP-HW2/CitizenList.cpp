@@ -7,7 +7,7 @@ node* CitizenList::createNewNode(Citizen* citizen){
     return newNode;
 }
 
-CitizenList::CitizenList() {
+CitizenList::CitizenList() : len(0) {
     this->head = NULL;
     this->tail = NULL;
 }
@@ -37,6 +37,7 @@ void CitizenList::addNode(Citizen* citizen)
         tail -> next = newNode;
         tail = tail->next;
     }
+    this->len++;
 }
 
 void CitizenList::printFirstNRepresantives(const int n)
@@ -64,6 +65,7 @@ ostream& operator<<(ostream& os, const CitizenList& citizenList)
 
 void CitizenList::save(ostream& out) const
 {
+    out.write(rcastcc(&this->len), sizeof(this->len));
     node* curr = this->head;
     while (curr != nullptr)
     {
@@ -72,7 +74,18 @@ void CitizenList::save(ostream& out) const
     }
 }
 
+void CitizenList::load(istream &in) {
+    in.read(rcastc(&this->len), sizeof(this->len));
+    for (int i = 0; i < this->len; ++i) {
+        this->addNode(new Citizen(in));
+    }
+}
+
 void node::save(ostream& out) const
 {
     this->citizen->save(out);
+}
+
+void node::load(istream &in) {
+    this->citizen->load(in);
 }

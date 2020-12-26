@@ -112,3 +112,16 @@ void Party::save(ostream& out) const
     out.write(rcastcc(&this->numberOfWinningRepresantives), sizeof(numberOfWinningRepresantives));
 
 }
+
+void Party::load(istream& in){
+    int nameLen = strlen(this->name);
+    in.read(rcastc(&nameLen), sizeof(nameLen));
+    in.read(rcastc(this->name), sizeof(char) * nameLen);
+    this->partyHead->load(in);
+
+    in.read(rcastc(&this->id), sizeof(id));
+    this->representivesArr->load(in);
+    in.read(rcastc(&this->sizeRepresentivesArr), sizeof(sizeRepresentivesArr));
+    in.read(rcastc(&this->numberOfVotes), sizeof(numberOfVotes));
+    in.read(rcastc(&this->numberOfWinningRepresantives), sizeof(numberOfWinningRepresantives));
+}
