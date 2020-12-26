@@ -255,3 +255,19 @@ void District::merge(votesPerParty* indexesArr1, votesPerParty* indexesArr2, int
     }
 }
 
+void District::save(ostream& out) const
+{
+    int nameLen = strlen(this->name);
+    out.write(rcastcc(&nameLen), sizeof(nameLen));
+    out.write(rcastcc(this->name), sizeof(char) * nameLen);
+
+    out.write(rcastcc(&this->id), sizeof(this->id));
+    out.write(rcastcc(&this->citizenNum), sizeof(this->citizenNum));
+    out.write(rcastcc(&this->votersPercentage), sizeof(this->votersPercentage));
+    out.write(rcastcc(&this->voteCount), sizeof(this->voteCount));
+
+    int electionResultsLen = this->electionResultsSize;
+    out.write(rcastcc(&electionResultsLen), sizeof(electionResultsLen));
+    out.write(rcastcc(this->electionResults), sizeof(int) * electionResultsLen);
+    
+}

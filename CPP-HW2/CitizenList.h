@@ -8,6 +8,8 @@ struct node
 {
     Citizen* citizen;
     node *next;
+
+    void save(ostream& out) const;
 };
 
 class CitizenList
@@ -20,6 +22,8 @@ class CitizenList
         ~CitizenList();
         void addNode(Citizen* citizen);
         void printFirstNRepresantives(const int n);
+
+        void save(ostream& out) const;
         
         friend ostream& operator<<(ostream&, const CitizenList&);
 

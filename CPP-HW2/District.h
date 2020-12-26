@@ -3,7 +3,13 @@
 #include "Party.h"
 
 using namespace std;
+
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
+
 class Citizen;
+
+
 
 struct votesPerParty
 {
@@ -34,12 +40,15 @@ class District
         float getVotePercentage();
         void mergeSort(votesPerParty* indexesArr, int size);
         void merge(votesPerParty* indexesArr1, votesPerParty* indexesArr2, int size1, int size2, votesPerParty* res);
+        virtual void save(ostream& out) const;
         int* getElectionResults();
         friend ostream& operator<<(ostream&, const District&);
         virtual void printType(std::ostream& os) const;
         virtual void printElectionResult(int partiesLogSize, Party** parties);
         votesPerParty* getPartiesSortedByVotes(int* electionResult, int electionResultLogSize);
     private:
+
+
 		char *name;
 		int id;
 		int citizenNum;

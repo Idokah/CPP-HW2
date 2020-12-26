@@ -2,6 +2,10 @@
 #include <iostream>
 using namespace std;
 
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
+
+
 class District;
 
 class Citizen
@@ -23,7 +27,7 @@ class Citizen
         bool getIsAlreadyVote() const;
 
 		friend ostream& operator<<(ostream&, const Citizen&);
-
+		void save(ostream& out) const;
     private:
 		char* name;
 		char* id;

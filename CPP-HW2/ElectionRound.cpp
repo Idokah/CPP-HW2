@@ -180,8 +180,6 @@ void ElectionRound::mergeSort(Party** pointersArr, int size) {
     }
 }
 
-
-
 void ElectionRound::merge(Party** pointersArr1, Party** pointersArr2,int size1,int size2,Party** res)
 {
     Party* currentValue1;
@@ -218,3 +216,32 @@ void ElectionRound::merge(Party** pointersArr1, Party** pointersArr2,int size1,i
     }
 }
 
+void ElectionRound::save(ostream& out) const
+{
+    
+    District** districts;
+    Citizen** votersBook;
+    Party** parties;
+    this->date.save(out);
+    out.write(rcastcc(&this->votersLogSize), sizeof(this->votersLogSize));
+    out.write(rcastcc(&this->votersPhySize), sizeof(this->votersPhySize));
+    for (int i = 0; i < this->votersLogSize; i++)
+        this->votersBook[i]->save(out);
+
+    out.write(rcastcc(&this->partiesLogSize), sizeof(this->partiesLogSize));
+    out.write(rcastcc(&this->partiesPhySize), sizeof(this->partiesPhySize));
+    for (int i = 0; i < this->partiesLogSize; i++)
+        this->parties[i]->save(out);
+
+    out.write(rcastcc(&this->districtsLogSize), sizeof(this->districtsLogSize));
+    out.write(rcastcc(&this->districtsPhySize), sizeof(this->districtsPhySize));
+    for (int i = 0; i < this->districtsLogSize; i++)
+        this->districts[i]->save(out);
+}
+
+void ElectionRound::Date::save(ostream& out) const
+{
+    out.write(rcastcc(&year), sizeof(year));
+    out.write(rcastcc(&month), sizeof(month));
+    out.write(rcastcc(&day), sizeof(day));
+}

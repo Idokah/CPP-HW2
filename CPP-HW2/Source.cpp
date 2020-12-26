@@ -6,10 +6,20 @@
 #include "RegularElectionRound.h"
 #include "Party.h"
 
+enum class DISTRICT_TYPE {
+    unified = 0,
+    divided = 1
+};
+
+enum class ELECTION_ROUND_TYPE {
+    regular = 0,
+    simple = 1
+};
+
 void addDistrict(ElectionRound& electionRound);
-void addCitizen(ElectionRound& electionRound, int electionRoundType);
+void addCitizen(ElectionRound& electionRound, ELECTION_ROUND_TYPE electionRoundType);
 void addParty(ElectionRound& electionRound);
-void setCitizenAsPartyRepresentive(ElectionRound& electionRound, int electionRoundType);
+void setCitizenAsPartyRepresentive(ElectionRound& electionRound, ELECTION_ROUND_TYPE electionRoundType);
 void printAllDistricts(ElectionRound& electionRound);
 void printAllCitizens(ElectionRound& electionRound);
 void printAllParties(ElectionRound& electionRound);
@@ -20,10 +30,10 @@ bool isValidParty(const char* action, Party* party);
 bool isValidDistrictId(const int districtsLogSize, const int districtId);
 
 void voteMOCK(ElectionRound& electionRound, char* citizenId, int partyId);
-void addDistrictMOCK(ElectionRound& electionRound, char* name, int representativeNum, int type);
-void addCitizenMOCK(ElectionRound& electionRound, char* name, char* id, int districtNum, int electionRoundType);
+void addDistrictMOCK(ElectionRound& electionRound, char* name, int representativeNum, DISTRICT_TYPE type);
+void addCitizenMOCK(ElectionRound& electionRound, char* name, char* id, int districtNum, ELECTION_ROUND_TYPE electionRoundType);
 void addPartyMOCK(ElectionRound& electionRound, char* name, char* id);
-void setCitizenAsPartyRepresentiveMOCK(ElectionRound& electionRound, char* representiveId, int partyId, int districtId, int electionRoundType);
+void setCitizenAsPartyRepresentiveMOCK(ElectionRound& electionRound, char* representiveId, int partyId, int districtId, ELECTION_ROUND_TYPE electionRoundType);
 
 using namespace std;
 
@@ -41,27 +51,32 @@ enum class OPTIONS {
 };
 
 
+
 const int MAX_STRING_LEN = 100;
 
 int main()
 {
     OPTIONS option=OPTIONS::showElectionResults;
-    int day = 1, month = 1, year = 1, electionRoundType = 0;
+    int day = 1, month = 1, year = 1, electionRoundTypeNum = 0;
+    ELECTION_ROUND_TYPE electionRoundType;
     int optionNum;
 	//cout << "enter elections date DD MM YYYY ";
 	//cin >> day >> month >> year;
 
     //cout << "enter elections round type (0 for regular, 1 for simple)";
     //cin >> electionRoundType;
-    
+    electionRoundType = (ELECTION_ROUND_TYPE)electionRoundTypeNum;
+
+
+
     ElectionRound* electionRound;
-    if (electionRoundType == 0) electionRound = new RegularElectionRound(day, month, year);
+    if (electionRoundType == ELECTION_ROUND_TYPE::regular) electionRound = new RegularElectionRound(day, month, year);
     else electionRound = new SimpleElectionRound(day, month, year);
 
 
-    addDistrictMOCK(*electionRound, const_cast<char*>("A"), 4,1);
-    addDistrictMOCK(*electionRound, const_cast<char*>("B"), 10,1);
-    addDistrictMOCK(*electionRound, const_cast<char*>("C"), 2,0);
+    addDistrictMOCK(*electionRound, const_cast<char*>("A"), 4,DISTRICT_TYPE::divided);
+    addDistrictMOCK(*electionRound, const_cast<char*>("B"), 10, DISTRICT_TYPE::divided);
+    addDistrictMOCK(*electionRound, const_cast<char*>("C"), 2, DISTRICT_TYPE::unified);
 
     addCitizenMOCK(*electionRound, const_cast<char*>("A1"), const_cast<char*>("11"), 1, electionRoundType);
     addCitizenMOCK(*electionRound, const_cast<char*>("A2"), const_cast<char*>("12"), 1, electionRoundType);
@@ -193,8 +208,8 @@ void voteMOCK(ElectionRound& electionRound, char* citizenId, int partyId) {
     party->increaseNumberOfVotes();
 }
 
-void setCitizenAsPartyRepresentiveMOCK(ElectionRound& electionRound, char* representiveId, int partyId, int districtId, int electionRoundType) {
-    districtId = (electionRoundType == 0) ? districtId : 1;
+void setCitizenAsPartyRepresentiveMOCK(ElectionRound& electionRound, char* representiveId, int partyId, int districtId, ELECTION_ROUND_TYPE electionRoundType) {
+    districtId = (electionRoundType == ELECTION_ROUND_TYPE::regular) ? districtId : 1;
     Citizen* citizen = electionRound.getCitizenByID(representiveId);
     if (!isValidCitizen("setCitizenAsPartyRepresentive", citizen) || !isValidDistrictId(electionRound.getDistrictLogSize(), districtId)) return;
     citizen->setIsPartyMember();
@@ -203,19 +218,19 @@ void setCitizenAsPartyRepresentiveMOCK(ElectionRound& electionRound, char* repre
     party->addRepresentive(districtId, citizen);
 }
 
-void addDistrictMOCK(ElectionRound& electionRound, char* name, int representativeNum, int districtType) {
+void addDistrictMOCK(ElectionRound& electionRound, char* name, int representativeNum, DISTRICT_TYPE districtType) {
     District* district;
-    if (districtType == 0) district = new UnifiedDistrict(name, representativeNum);
+    if (districtType == DISTRICT_TYPE::unified) district = new UnifiedDistrict(name, representativeNum);
     else district = new DividedDistrict(name, representativeNum);
     electionRound.addDistrict(district);
 }
 
-void addCitizenMOCK(ElectionRound& electionRound, char* name, char* id, int districtNum, int electionRoundType) {
+void addCitizenMOCK(ElectionRound& electionRound, char* name, char* id, int districtNum, ELECTION_ROUND_TYPE electionRoundType) {
     int birthYear = 1992;
     if (electionRound.isCitizenIdIsAlreadyExist(id)) return;
-    districtNum = (electionRoundType == 0) ? districtNum : 1;
+    districtNum = (electionRoundType == ELECTION_ROUND_TYPE::regular) ? districtNum : 1;
     District* district = electionRound.getDistrictByID(districtNum);
-    if (electionRoundType == 0 && !isValidDistrictId(electionRound.getDistrictLogSize(), districtNum)) return;
+    if (electionRoundType == ELECTION_ROUND_TYPE::regular && !isValidDistrictId(electionRound.getDistrictLogSize(), districtNum)) return;
     Citizen* citizen = new Citizen(name, id, birthYear, district);
     electionRound.addCitizen(citizen);
 }
@@ -232,26 +247,28 @@ void addPartyMOCK(ElectionRound& electionRound, char* name, char* id) {
 void addDistrict(ElectionRound &electionRound) {
     char name[MAX_STRING_LEN];
     int representativeNum; 
-    bool districtType;
+    int districtTypeNum;
+    DISTRICT_TYPE districtType;
     District* district;
     cout << "enter name, number of representative and district type (1 for divided, 0 for unified)";
-    cin >> name >> representativeNum >> districtType;
+    cin >> name >> representativeNum >> districtTypeNum;
+    districtType = (DISTRICT_TYPE)districtTypeNum;
     if (representativeNum <= 0) {
         cout << "Sorry a district have a positive number of represenative number" << endl;
         return;
     }
-    if (districtType == 0) district = new UnifiedDistrict(name, representativeNum);
+    if (districtType == DISTRICT_TYPE::unified) district = new UnifiedDistrict(name, representativeNum);
     else district = new DividedDistrict(name, representativeNum);
     electionRound.addDistrict(district);
 }
 
-void addCitizen(ElectionRound& electionRound, int electionRoundType) {
+void addCitizen(ElectionRound& electionRound, ELECTION_ROUND_TYPE electionRoundType) {
     char name[MAX_STRING_LEN];
     char id[MAX_STRING_LEN];
     int birthYear, districtNum;
     cout << "enter name, id, birth year, district number";
     cin >> name >> id >> birthYear >> districtNum;
-    districtNum = (electionRoundType == 0) ? districtNum : 1;
+    districtNum = (electionRoundType == ELECTION_ROUND_TYPE::regular) ? districtNum : 1;
     District* district = electionRound.getDistrictByID(districtNum);
     if (electionRound.isCitizenIdIsAlreadyExist(id) || !isValidDistrictId(electionRound.getDistrictLogSize(), districtNum)) return;
     Citizen* citizen = new Citizen(name, id, birthYear, district);
@@ -270,13 +287,13 @@ void addParty(ElectionRound& electionRound) {
     head->setIsPartyMember();
 }
 
-void setCitizenAsPartyRepresentive(ElectionRound& electionRound, int electionRoundType) {
+void setCitizenAsPartyRepresentive(ElectionRound& electionRound, ELECTION_ROUND_TYPE electionRoundType) {
     char representiveId[MAX_STRING_LEN];
     int partyId;
     int districtId;
     cout << "enter representive ID, party ID, district ID ";
     cin >> representiveId >> partyId >> districtId;
-    districtId = (electionRoundType == 0) ? districtId : 1;
+    districtId = (electionRoundType == ELECTION_ROUND_TYPE::regular) ? districtId : 1;
     Citizen *citizen = electionRound.getCitizenByID(representiveId);
     if (!isValidCitizen("setCitizenAsPartyRepresentive", citizen) || !isValidDistrictId(electionRound.getDistrictLogSize(), districtId)) return;
     citizen->setIsPartyMember();

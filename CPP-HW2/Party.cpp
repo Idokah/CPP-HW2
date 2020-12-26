@@ -97,3 +97,18 @@ ostream& operator<<(ostream& os, const Party& party)
     }
     return os;
 }
+
+void Party::save(ostream& out) const
+{
+    int nameLen = strlen(this->name);
+    out.write(rcastcc(&nameLen), sizeof(nameLen));
+    out.write(rcastcc(this->name), sizeof(char) * nameLen);
+    this->partyHead->save(out);
+
+    out.write(rcastcc(&this->id), sizeof(id));
+    this->representivesArr->save(out);
+    out.write(rcastcc(&this->sizeRepresentivesArr), sizeof(sizeRepresentivesArr));
+    out.write(rcastcc(&this->numberOfVotes), sizeof(numberOfVotes));
+    out.write(rcastcc(&this->numberOfWinningRepresantives), sizeof(numberOfWinningRepresantives));
+
+}

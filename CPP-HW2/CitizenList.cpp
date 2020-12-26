@@ -61,3 +61,18 @@ ostream& operator<<(ostream& os, const CitizenList& citizenList)
     }
     return os;
 }
+
+void CitizenList::save(ostream& out) const
+{
+    node* curr = this->head;
+    while (curr != nullptr)
+    {
+        curr->save(out);
+        curr = curr->next;
+    }
+}
+
+void node::save(ostream& out) const
+{
+    this->citizen->save(out);
+}

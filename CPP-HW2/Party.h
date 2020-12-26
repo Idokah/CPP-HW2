@@ -23,6 +23,8 @@ class Party {
         void increaseNumberOfWinningRepresentives(const int n);
         int getNumberOfWinningRepresantives();
 
+		void save(ostream& out) const;
+
 		friend ostream& operator<<(ostream&, const Party&);
 
     private:

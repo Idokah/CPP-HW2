@@ -4,6 +4,9 @@
 #include "District.h"
 #include "Party.h"
 
+#define rcastcc reinterpret_cast<const char*>
+#define rcastc reinterpret_cast<char*>
+
 class ElectionRound
 {
 	public:
@@ -26,12 +29,14 @@ class ElectionRound
         void printAllParties() const;
         Party** getSortedParties();
 		bool isCitizenIdIsAlreadyExist(const char* citizenID) const;
+		virtual void save(ostream& out) const;
 
 private:
 		struct Date {
 			const int year;
             const int month;
             const int day;
+			void save(ostream& out) const;
 		};
 		Date date;
 		// voters
@@ -54,7 +59,5 @@ protected:
 	int districtsPhySize;
 	District** districts;
 	void increaseDistrictsArrSize();
-
-
 };
 
