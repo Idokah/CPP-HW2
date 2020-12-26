@@ -16,3 +16,9 @@ void SimpleElectionRound::printAllDistricts() const
 {
     cout << "im sorry but you dont have any districts, it a simple election round!" << endl;
 }
+
+void SimpleElectionRound::save(ostream& out) const
+{
+    out.write(rcastcc(ELECTION_ROUND_TYPE::simple), sizeof(ELECTION_ROUND_TYPE::simple));
+    this->ElectionRound::save(out);
+}

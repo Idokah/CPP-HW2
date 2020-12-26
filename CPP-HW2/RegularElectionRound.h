@@ -11,6 +11,7 @@ class RegularElectionRound : public ElectionRound {
 		RegularElectionRound(int day, int month, int year);
 		virtual void addDistrict(District* district);
 		virtual void printAllDistricts() const;
+		void save(ostream& out) const;
 	private:
 };
 

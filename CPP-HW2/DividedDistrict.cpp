@@ -31,7 +31,7 @@ void DividedDistrict::printElectionResult(int partiesLogSize, Party** parties)
 
 void DividedDistrict::save(ostream& out) const
 {
-    this->District::save(out);
     out.write(rcastcc(DISTRICT_TYPE::divided), sizeof(DISTRICT_TYPE::divided));
+    this->District::save(out);
 }
 

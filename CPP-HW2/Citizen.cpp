@@ -88,7 +88,4 @@ void Citizen::save(ostream& out) const
     out.write(rcastcc(&this->isPartyMember), sizeof(this->isPartyMember));
     out.write(rcastcc(&this->isAlreadyVote), sizeof(this->isAlreadyVote));
 
-
-   
-
 }

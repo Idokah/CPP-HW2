@@ -17,3 +17,9 @@ void RegularElectionRound::printAllDistricts () const
 		cout << *(districts[i]) << endl;
 	}
 }
+
+void RegularElectionRound::save(ostream& out) const
+{
+	out.write(rcastcc(ELECTION_ROUND_TYPE::regular), sizeof(ELECTION_ROUND_TYPE::regular));
+	this->ElectionRound::save(out);
+}

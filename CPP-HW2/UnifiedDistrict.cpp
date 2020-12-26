@@ -20,3 +20,8 @@ void UnifiedDistrict::printElectionResult(int partiesLogSize, Party** parties)
     winningParty->increaseNumberOfWinningRepresentives(this->getRepresentativeNum());
 	District::printElectionResult(partiesLogSize, parties);
 }
+void UnifiedDistrict::save(ostream& out) const
+{
+    out.write(rcastcc(DISTRICT_TYPE::divided), sizeof(DISTRICT_TYPE::divided));
+    this->District::save(out);
+}
