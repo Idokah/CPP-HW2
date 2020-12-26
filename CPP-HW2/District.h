@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Party.h"
+#include "Enums.h"
 
 using namespace std;
 

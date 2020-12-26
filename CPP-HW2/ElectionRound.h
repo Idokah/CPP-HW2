@@ -3,6 +3,7 @@
 #include "Citizen.h"
 #include "District.h"
 #include "Party.h"
+#include "Enums.h"
 
 #define rcastcc reinterpret_cast<const char*>
 #define rcastc reinterpret_cast<char*>
