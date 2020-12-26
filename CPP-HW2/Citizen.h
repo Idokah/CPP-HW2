@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 using namespace std;
-#include "Enums.h"
+#include "consts.h"
 
 #define rcastcc reinterpret_cast<const char*>
 #define rcastc reinterpret_cast<char*>
@@ -15,7 +15,7 @@ class Citizen
 		Citizen();
         Citizen(char* name, char* id, unsigned int birthYear, District* district);
         Citizen(const Citizen& other);
-        Citizen(istream& in);
+        Citizen(istream& in, District** districts, int districtsSize);
 		~Citizen();
 		char* getID() const;
 		Citizen& operator=(const Citizen& other);
@@ -30,7 +30,7 @@ class Citizen
 
 		friend ostream& operator<<(ostream&, const Citizen&);
 		void save(ostream& out) const;
-		void load(istream& in);
+		void load(istream& in, District** districts, int districtsSize);
     private:
 		char* name;
 		char* id;

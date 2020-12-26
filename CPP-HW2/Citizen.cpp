@@ -4,8 +4,6 @@
 
 using namespace std;
 
-int MAX_STRING_LEN = 100;
-
 char* getString(const char* input) {
 	int inputLen = strlen(input);
 	char* str = new char[inputLen + 1];
@@ -13,8 +11,8 @@ char* getString(const char* input) {
 	str[inputLen] = '\0';
 	return str;
 }
-// TODO
-Citizen::Citizen() {}
+Citizen::Citizen() :  name(nullptr), id(nullptr), birthYear(0), district(nullptr), isPartyMember(false), isAlreadyVote(false) {
+}
 
 Citizen::Citizen(char* name, char* id, unsigned int birthYear, District* district) : isPartyMember(false), isAlreadyVote(false) {
     this->name = getString(name);
@@ -27,8 +25,8 @@ Citizen::Citizen(const Citizen& other) {
     *this = other;
 }
 
-Citizen::Citizen(istream& in){
-    this->load(in);
+Citizen::Citizen(istream& in, District** districts, int districtsSize) : Citizen() {
+    this->load(in, districts, districtsSize);
 }
 
 Citizen::~Citizen() {
@@ -80,13 +78,13 @@ void Citizen::save(ostream& out) const
 {
     int nameLen = strlen(this->name);
     out.write(rcastcc(&nameLen), sizeof(nameLen));
-    out.write(rcastcc(&this->name), sizeof(char) * nameLen);
+    out.write(rcastcc(this->name), sizeof(char) * nameLen);
 
     int idLen = strlen(this->id);
     out.write(rcastcc(&idLen), sizeof(idLen));
-    out.write(rcastcc(this->name), sizeof(char) * idLen);
-
-    this->district->save(out);
+    out.write(rcastcc(this->id), sizeof(char) * idLen);
+    int districtID = this->district->getID();
+    out.write(rcastcc(&districtID), sizeof(districtID));
 
     out.write(rcastcc(&this->birthYear), sizeof(this->birthYear));
     out.write(rcastcc(&this->isPartyMember), sizeof(this->isPartyMember));
@@ -94,17 +92,30 @@ void Citizen::save(ostream& out) const
 
 }
 
-void Citizen::load(istream& in)
+void Citizen::load(istream& in, District** districts, int districtsSize)
 {
-    int nameLen = strlen(this->name);
+    int nameLen;
     in.read(rcastc(&nameLen), sizeof(nameLen));
-    in.read(rcastc(&this->name), sizeof(char) * nameLen);
+    this->name = new char[nameLen + 1];
+    this->name[nameLen] = '\0';
+    in.read(rcastc(this->name), sizeof(char) * nameLen);
 
-    int idLen = strlen(this->id);
+    int idLen;
     in.read(rcastc(&idLen), sizeof(idLen));
-    in.read(rcastc(this->name), sizeof(char) * idLen);
+    this->id = new char[idLen + 1];
+    this->id[idLen] = '\0';
+    in.read(rcastc(this->id), sizeof(char) * idLen);
 
-    this->district->load(in);
+    int districtID;
+    in.read(rcastc(&districtID), sizeof(districtID));
+    for (int i = 0; i < districtsSize; i++)
+    {
+        if (districts[i]->getID() == districtID)
+        {
+            this->district = districts[i];
+            break;
+        }
+    }
 
     in.read(rcastc(&this->birthYear), sizeof(this->birthYear));
     in.read(rcastc(&this->isPartyMember), sizeof(this->isPartyMember));

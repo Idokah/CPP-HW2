@@ -33,7 +33,7 @@ class Party {
 		char* name;
 		Citizen* partyHead;
 		int id;
-		CitizenList* representivesArr; 
+		CitizenList** representivesArr; 
         int sizeRepresentivesArr;
 		int generateID();
         void increaseArrSize(const int newSize);

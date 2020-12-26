@@ -63,7 +63,7 @@ ostream& operator<<(ostream& os, const CitizenList& citizenList)
     node* curr = citizenList.head;
     while (curr != nullptr)
     {
-        cout << *(curr->citizen) << endl;
+        cout << "           " << *(curr->citizen) << endl;
         curr = curr->next;
     }
     return os;
@@ -83,10 +83,11 @@ void CitizenList::save(ostream& out) const
 
 void CitizenList::load(istream& in, Citizen** citizens, int citizensSize) {
     
-    in.read(rcastc(&this->len), sizeof(this->len));
+    int Len;
+    in.read(rcastc(&Len), sizeof(Len));
     int idLen;
     char citizenId[MAX_STRING_LEN];
-    for (int i = 0; i < this->len; ++i) {
+    for (int i = 0; i < Len; ++i) {
         in.read(rcastc(&idLen), sizeof(idLen));
         in.read(rcastc(citizenId), sizeof(char) * idLen);
         citizenId[idLen] = '\0';
@@ -113,6 +114,7 @@ void CitizenList::saveIDs(ostream& out) const
         idLen = strlen(citizenID);
         out.write(rcastcc(&idLen), sizeof(idLen));
         out.write(rcastcc(citizenID), sizeof(char) * idLen);
+        curr=curr->next;
     }
 }
 

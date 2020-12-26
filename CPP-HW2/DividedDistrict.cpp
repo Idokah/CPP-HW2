@@ -29,8 +29,7 @@ void DividedDistrict::printElectionResult(int partiesLogSize, Party** parties)
         party = votersPerParty->size > i ? parties[votersPerParty[i].partyIndex] : parties[i];
         if (numOfRepresantive != 0)
         {
-            cout << "    " <<  *(party->getPartyHead()) << endl;
-            cout << "        Number of represantives: " << numOfRepresantive << endl;
+            cout << "    " <<  *(party->getPartyHead()) << ", Number of represantives: " << numOfRepresantive << endl;
             party->increaseNumberOfWinningRepresentives(numOfRepresantive);
         }
      }

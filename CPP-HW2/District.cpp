@@ -269,6 +269,7 @@ void District::save(ostream& out) const
     int electionResultsLen = this->electionResultsSize;
     out.write(rcastcc(&electionResultsLen), sizeof(electionResultsLen));
     out.write(rcastcc(this->electionResults), sizeof(int) * electionResultsLen);
+    out.write(rcastcc(&this->representativeNum), sizeof(this->representativeNum));
     
 }
 
@@ -288,5 +289,6 @@ void District::load(istream& in)
     in.read(rcastc(&electionResultsLen), sizeof(electionResultsLen));
     this->electionResults = new int[electionResultsLen];
     in.read(rcastc(this->electionResults), sizeof(int) * electionResultsLen);
+    in.read(rcastc(&this->representativeNum), sizeof(this->representativeNum));
 }
 
