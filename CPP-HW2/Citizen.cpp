@@ -89,3 +89,21 @@ void Citizen::save(ostream& out) const
     out.write(rcastcc(&this->isAlreadyVote), sizeof(this->isAlreadyVote));
 
 }
+
+void Citizen::load(istream& in)
+{
+    int nameLen = strlen(this->name);
+    in.read(rcastc(&nameLen), sizeof(nameLen));
+    in.read(rcastc(&this->name), sizeof(char) * nameLen);
+
+    int idLen = strlen(this->id);
+    in.read(rcastc(&idLen), sizeof(idLen));
+    in.read(rcastc(this->name), sizeof(char) * idLen);
+
+    this->district->load(in);
+
+    in.read(rcastc(&this->birthYear), sizeof(this->birthYear));
+    in.read(rcastc(&this->isPartyMember), sizeof(this->isPartyMember));
+    in.read(rcastc(&this->isAlreadyVote), sizeof(this->isAlreadyVote));
+
+}

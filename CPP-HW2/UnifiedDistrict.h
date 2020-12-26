@@ -10,4 +10,6 @@ public:
 
 	void save(ostream& out) const;
 
+	void load(istream& in);
+
 };

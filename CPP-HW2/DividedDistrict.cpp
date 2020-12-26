@@ -35,3 +35,22 @@ void DividedDistrict::save(ostream& out) const
     this->District::save(out);
 }
 
+void DividedDistrict::load(istream& in)
+{
+
+    int nameLen;
+    in.read(rcastc(&nameLen), sizeof(nameLen));
+    this->name = new char(nameLen + 1);
+    this->name[nameLen] = '\0';
+    in.read(rcastc(this->name), sizeof(char) * nameLen);
+    in.read(rcastc(&this->id), sizeof(this->id));
+    in.read(rcastc(&this->citizenNum), sizeof(this->citizenNum));
+    in.read(rcastc(&this->votersPercentage), sizeof(this->votersPercentage));
+    in.read(rcastc(&this->voteCount), sizeof(this->voteCount));
+
+    int electionResultsLen;
+    in.read(rcastc(&electionResultsLen), sizeof(electionResultsLen));
+    this->electionResults = new int(electionResultsLen);
+    in.read(rcastc(this->electionResults), sizeof(int) * electionResultsLen);
+
+}

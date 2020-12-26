@@ -10,6 +10,8 @@ class DividedDistrict : public District {
 		virtual void printElectionResult(int partiesLogSize, Party** parties);
 		virtual void save(ostream& out) const;
 
+		void load(istream& in);
+
 	private:
 
 };

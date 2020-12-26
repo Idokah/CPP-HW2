@@ -42,6 +42,7 @@ class District
         void mergeSort(votesPerParty* indexesArr, int size);
         void merge(votesPerParty* indexesArr1, votesPerParty* indexesArr2, int size1, int size2, votesPerParty* res);
         virtual void save(ostream& out) const;
+        void load(istream& in);
         int* getElectionResults();
         friend ostream& operator<<(ostream&, const District&);
         virtual void printType(std::ostream& os) const;
@@ -49,17 +50,19 @@ class District
         votesPerParty* getPartiesSortedByVotes(int* electionResult, int electionResultLogSize);
     private:
 
-
-		char *name;
-		int id;
-		int citizenNum;
-		float votersPercentage;
-		int representativeNum;
 		int generateID();
-        int voteCount;
         //// ---- election results functionality ----
-        int* electionResults;  // the index represent the (party ID - 1) and the value the number of citizens that vote for it.
-        int electionResultsSize;
         void increaseArrSize(int*& arr,int &currSize, const int newSize);
         void addToElectionResult(const int partyNum);
+
+    protected:
+        char* name;
+        int id;
+        int citizenNum;
+        float votersPercentage;
+        int representativeNum;
+        int voteCount;
+        int* electionResults;  // the index represent the (party ID - 1) and the value the number of citizens that vote for it.
+        int electionResultsSize;
+
 };

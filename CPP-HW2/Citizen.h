@@ -29,6 +29,7 @@ class Citizen
 
 		friend ostream& operator<<(ostream&, const Citizen&);
 		void save(ostream& out) const;
+		void load(istream& in);
     private:
 		char* name;
 		char* id;
