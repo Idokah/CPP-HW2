@@ -287,6 +287,7 @@ void District::load(istream& in)
 
     int electionResultsLen;
     in.read(rcastc(&electionResultsLen), sizeof(electionResultsLen));
+    this->electionResultsSize = electionResultsLen;
     this->electionResults = new int[electionResultsLen];
     in.read(rcastc(this->electionResults), sizeof(int) * electionResultsLen);
     in.read(rcastc(&this->representativeNum), sizeof(this->representativeNum));
