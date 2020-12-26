@@ -27,6 +27,10 @@ Citizen::Citizen(const Citizen& other) {
     *this = other;
 }
 
+Citizen::Citizen(istream& in){
+    this->load(in);
+}
+
 Citizen::~Citizen() {
     delete[] name;
     delete[] id;

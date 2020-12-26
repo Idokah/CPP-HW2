@@ -14,7 +14,8 @@ class Citizen
     public:
 		Citizen();
         Citizen(char* name, char* id, unsigned int birthYear, District* district);
-		Citizen(const Citizen& other);
+        Citizen(const Citizen& other);
+        Citizen(istream& in);
 		~Citizen();
 		char* getID() const;
 		Citizen& operator=(const Citizen& other);
