@@ -24,6 +24,7 @@ class Party {
         int getNumberOfWinningRepresantives();
 
 		void save(ostream& out) const;
+        void load(istream &in);
 
 		friend ostream& operator<<(ostream&, const Party&);
 
@@ -37,5 +38,5 @@ class Party {
         void increaseArrSize(const int newSize);
 		int numberOfVotes;
 		int numberOfWinningRepresantives;
-    };
+};
 
