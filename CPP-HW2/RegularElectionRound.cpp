@@ -1,5 +1,5 @@
 #include "RegularElectionRound.h"
-// TODO
+
 RegularElectionRound::RegularElectionRound()
 {
 }

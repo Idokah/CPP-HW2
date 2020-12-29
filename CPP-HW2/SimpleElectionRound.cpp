@@ -1,13 +1,12 @@
 #include "SimpleElectionRound.h"
 #include "DividedDistrict.h"
-// TODO
+
 SimpleElectionRound::SimpleElectionRound()
 {
 }
 
-SimpleElectionRound::SimpleElectionRound(int day, int month, int year) : ElectionRound(day, month, year) {
-    // TODO - check about represantives number
-    District* district = new DividedDistrict(const_cast<char*>("Dummy"), 10);
+SimpleElectionRound::SimpleElectionRound(int day, int month, int year, int numOfRepresentative) : ElectionRound(day, month, year) {
+    District* district = new DividedDistrict(const_cast<char*>("Dummy"), numOfRepresentative);
     this->districts[this->districtsLogSize++] = district;
 }
 

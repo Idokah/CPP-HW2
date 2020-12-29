@@ -28,6 +28,7 @@ class Party {
 		void load(istream& in, Citizen** citizens, int citizensSize);
 
 		friend ostream& operator<<(ostream&, const Party&);
+		void setGenerateIDtoValue(int val);
 
     private:
 		char* name;
@@ -35,7 +36,7 @@ class Party {
 		int id;
 		CitizenList** representivesArr; 
         int sizeRepresentivesArr;
-		int generateID();
+		int generateID(int val=0);
         void increaseArrSize(const int newSize);
 		int numberOfVotes;
 		int numberOfWinningRepresantives;

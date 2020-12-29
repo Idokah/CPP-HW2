@@ -44,10 +44,15 @@ Party::~Party() {
 
 const Citizen* Party::getPartyHead(){ return this->partyHead; }
 
-int Party::generateID()
+int Party::generateID(int val)
 {
-	static int id = 0;
-	return ++id;
+    static int id = 0;
+    if (val != 0)
+    {
+        id = val;
+        return id;
+    }
+    return ++id;
 }
 
 int Party::getID() const { return this->id; }
@@ -62,13 +67,11 @@ void Party::addRepresentive(const int districtId, Citizen* newRepresentive)
 }
 
 void Party::increaseArrSize(const int newSize) {
-    //CitizenList** newArr = new CitizenList*[newSize * 2];
     CitizenList** newArr = new CitizenList*[newSize];
     for (int i = 0; i < newSize; i++)
     {
         newArr[i] = (i < this->sizeRepresentivesArr) ? this->representivesArr[i] : new CitizenList();
     }
-    //this->sizeRepresentivesArr = newSize * 2;
     this->sizeRepresentivesArr = newSize;
     delete[] this->representivesArr;
     this->representivesArr = newArr;
@@ -85,11 +88,11 @@ char* Party::getPartyHeadName() const { return this->partyHead->getName(); }
 
 void Party::printNRepresantive(const int districtID,const int n)
 { 
-    if (districtID >= sizeRepresentivesArr) {
+    if (districtID > sizeRepresentivesArr) {
         cout << "            there aren't enough represantives" << endl;
         return;
     }
-    representivesArr[districtID-1]->printFirstNRepresantives(n); //changed to -1 dont sure 
+    representivesArr[districtID-1]->printFirstNRepresantives(n);
 }
 
 void Party::increaseNumberOfWinningRepresentives(const int n) { this->numberOfWinningRepresantives+=n; }
@@ -159,4 +162,10 @@ void Party::load(istream& in, Citizen** citizens, int citizensSize)
 
     in.read(rcastc(&this->numberOfVotes), sizeof(numberOfVotes));
     in.read(rcastc(&this->numberOfWinningRepresantives), sizeof(numberOfWinningRepresantives));
+   
+}
+
+void Party::setGenerateIDtoValue(int val)
+{
+    this->generateID(val);
 }

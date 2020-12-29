@@ -11,11 +11,8 @@
 class ElectionRound
 {
 	public:
-		ElectionRound();
-		ElectionRound(const int day, const int month,const int year);
-        ElectionRound(ElectionRound& electionRound) = delete;
         void operator=(const ElectionRound& other) = delete;
-        ~ElectionRound();
+        virtual ~ElectionRound();
 		virtual void addDistrict(District* district);
 		void addCitizen(Citizen* citizen);
 		void addParty(Party* party);
@@ -32,7 +29,7 @@ class ElectionRound
         Party** getSortedParties();
 		bool isCitizenIdIsAlreadyExist(const char* citizenID) const;
 		virtual void save(ostream& out) const;
-
+		void showElectionRoundDate() const;
 		void load(istream& in);
 
 private:
@@ -58,6 +55,9 @@ private:
         void mergeSort(Party** pointersArr, int size);
 		void merge(Party** pointersArr1, Party** pointersArr2, int size1, int size2, Party** res);
 	protected:
+		ElectionRound();
+		ElectionRound(const int day, const int month, const int year);
+		ElectionRound(ElectionRound& electionRound) = delete;
 		// districts
 		int districtsLogSize;
 		int districtsPhySize;

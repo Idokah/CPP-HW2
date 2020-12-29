@@ -66,9 +66,14 @@ District::~District()
     delete[] this->electionResults;
 }
 
-int District::generateID()
+int District::generateID(int val)
 {
 	static int id = 0;
+    if (val != 0)
+    {
+        id = val;
+        return id;
+    }
 	return ++id;
 }
 
@@ -159,7 +164,7 @@ ostream& operator<<(ostream& os, const District& district)
 
 void District::printElectionResult(int partiesLogSize, Party** parties)
 {
-    Party* party, * winningParty;
+    Party* party;
     char* headName;
     int numOfExistsPartiesInDistrict, * numOfRepresantivesPerParty = nullptr, * electionResults , partyIndex;
     float* percentagePerParty = nullptr;
@@ -173,7 +178,7 @@ void District::printElectionResult(int partiesLogSize, Party** parties)
 
     for (int j = 0; j < partiesLogSize; ++j) {
         partyIndex = votersPerParty->size > j ? votersPerParty[j].partyIndex : j;
-        cout << "    " << *(parties[partyIndex]) << endl;
+        cout << "    Party " << (parties[partyIndex]->getName()) <<":"<< endl;       
         if (j < numOfExistsPartiesInDistrict)
         {
             cout << "        number of voters- " << electionResults[partyIndex] << endl
@@ -201,6 +206,11 @@ votesPerParty* District::getPartiesSortedByVotes(int* electionResult, int electi
     }
     mergeSort(votesPerPartyArr, electionResultLogSize);
     return votesPerPartyArr;
+}
+
+void District::setGenerateIDtoValue(int val)
+{
+    this->generateID(val);
 }
 
 void District::mergeSort(votesPerParty* indexesArr, int size) {
@@ -290,6 +300,6 @@ void District::load(istream& in)
     this->electionResultsSize = electionResultsLen;
     this->electionResults = new int[electionResultsLen];
     in.read(rcastc(this->electionResults), sizeof(int) * electionResultsLen);
-    in.read(rcastc(&this->representativeNum), sizeof(this->representativeNum));
+    in.read(rcastc(&this->representativeNum), sizeof(this->representativeNum)); 
 }
 

@@ -3,7 +3,8 @@
 #include "DividedDistrict.h"
 #include "UnifiedDistrict.h"
 
-ElectionRound::ElectionRound()
+ElectionRound::ElectionRound():date({0,0,0}), votersPhySize(1), votersLogSize(0), votersBook(nullptr),
+                            parties(nullptr),partiesLogSize(0),partiesPhySize(1),districts(nullptr),districtsLogSize(0), districtsPhySize(1)
 {
 }
 
@@ -245,6 +246,12 @@ void ElectionRound::save(ostream& out) const
         this->parties[i]->save(out);
 }
 
+void ElectionRound::showElectionRoundDate() const
+{
+    cout << "-------- Election Round Date: " << this->date.day << "/" <<
+        this->date.month << "/" << this->date.year << "--------" << endl;
+}
+
 void ElectionRound::Date::save(ostream& out) const
 {
     out.write(rcastcc(&year), sizeof(year));
@@ -284,6 +291,8 @@ void ElectionRound::load(istream& in)
             this->districts[i] = new UnifiedDistrict(in);
             break;
         }
+        if (i == this->districtsLogSize - 1)//last iteration
+            this->districts[i]->setGenerateIDtoValue(this->districts[i]->getID());
     }
 
     in.read(rcastc(&this->votersLogSize), sizeof(this->votersLogSize));
@@ -291,7 +300,6 @@ void ElectionRound::load(istream& in)
     this->votersBook = new Citizen* [this->votersPhySize];
     for (int i = 0; i < this->votersLogSize; i++)
     {
-        //this->votersBook[i]->load(in);
         this->votersBook[i] = new Citizen(in,this->districts, this->districtsLogSize);
     }
 
@@ -300,7 +308,6 @@ void ElectionRound::load(istream& in)
     this->parties = new Party * [this->partiesPhySize];
     for (int i = 0; i < this->partiesLogSize; i++)
     {
-        //this->parties[i]->load(in);
         this->parties[i] = new Party(in, this->votersBook,this->votersLogSize);
     }
 }

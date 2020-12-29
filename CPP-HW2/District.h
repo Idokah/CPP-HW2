@@ -22,12 +22,9 @@ struct votesPerParty
 class District
 {
 	public:
-		District();
-		District(char* name, int representativeNum);
-		District(const District& other);
 		void operator=(const District& other);
 		void increaseCitizenNum();
-		~District();
+		virtual ~District();
         void addVote(Citizen* voter, const int partyNum);
         int getID();
         char* getName();
@@ -48,14 +45,18 @@ class District
         virtual void printType(std::ostream& os) const;
         virtual void printElectionResult(int partiesLogSize, Party** parties);
         votesPerParty* getPartiesSortedByVotes(int* electionResult, int electionResultLogSize);
+        void setGenerateIDtoValue(int val);
     private:
 
-		int generateID();
+		int generateID(int val=0);
         //// ---- election results functionality ----
         void increaseArrSize(int*& arr,int &currSize, const int newSize);
         void addToElectionResult(const int partyNum);
 
     protected:
+        District();
+        District(char* name, int representativeNum);
+        District(const District& other);
         char* name;
         int id;
         int citizenNum;

@@ -340,3 +340,6 @@ ASALocalRun/
 healthchecksdb
 /CPP-HW2/cmake-build-debug/
 /CPP-HW2/CMakeLists.txt
+/CPP-HW2/romi
+/CPP-HW2/ido.bin
+/CPP-HW2/Source With MOCK.cpp
